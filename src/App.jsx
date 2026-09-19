@@ -1155,10 +1155,22 @@ function StyleSheet() {
 .sw-ambient { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
 .sw-rainbow {
   position:absolute; inset:-25%; z-index:-1;
-  background:linear-gradient(120deg,#ff3d81,#7c5cff,#3ddcff,#5cff8f,#ffe23d,#ff9a3d);
-  opacity:0.18; mix-blend-mode:screen;
+  background:linear-gradient(120deg,#ff3d81,#ff9a3d,#ffe23d,#5cff8f,#3ddcff,#7c5cff,#ff3d81,#ff9a3d,#ffe23d);
+  background-size:400% 400%;
+  filter:blur(60px) saturate(1.6);
+  opacity:0.4; mix-blend-mode:screen;
+  animation: sw-rainbow-flow 14s ease-in-out infinite, sw-rainbow-hue 20s linear infinite;
 }
-.sw-app[data-spy-theme="light"] .sw-rainbow { opacity:0.12; mix-blend-mode:multiply; }
+.sw-app[data-spy-theme="light"] .sw-rainbow { opacity:0.28; mix-blend-mode:multiply; }
+@keyframes sw-rainbow-flow {
+  0% { background-position:0% 50%; }
+  50% { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
+}
+@keyframes sw-rainbow-hue {
+  from { filter:blur(60px) saturate(1.6) hue-rotate(0deg); }
+  to { filter:blur(60px) saturate(1.6) hue-rotate(360deg); }
+}
 @keyframes sw-rainbow-flow {
   0% { background-position:0% 50%; }
   50% { background-position:100% 50%; }
@@ -1170,10 +1182,11 @@ function StyleSheet() {
 }
 .sw-radar { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:-1; pointer-events:none; overflow:hidden; }
 .sw-radar::before, .sw-radar::after {
-  content:""; position:absolute; border-radius:50%; border:1px solid rgba(167,139,250,0.14);
-  width:60vmax; height:60vmax;
+  content:""; position:absolute; border-radius:50%; border:1px solid rgba(167,139,250,0.18);
+  width:60vmax; height:60vmax; animation: sw-spin 26s linear infinite;
 }
-.sw-radar::after { width:90vmax; height:90vmax; border-color:rgba(45,212,191,0.1); }
+.sw-radar::after { width:90vmax; height:90vmax; animation-duration:38s; animation-direction:reverse; border-color:rgba(45,212,191,0.12); }
+@keyframes sw-spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 @keyframes sw-spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 
 .sw-screen {
