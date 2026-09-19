@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.spy.game",
+    "sha256_cert_fingerprints": ["1F:8F:A3:6A:3B:DF:6C:0B:B8:DA:67:A7:3E:57:2F:DF:E7:96:CE:C8:92:7C:8A:C3:B1:B3:29:D0:C1:CE:85:3A"]
+  }
+}]
