@@ -2,7 +2,7 @@
   "name": "Шпион — party-игра",
   "short_name": "Шпион",
   "description": "Party-игра для 3–20 игроков: все знают слово, кроме шпиона.",
-  "start_url": ".",
+  "start_url": "https://spy-word-party.vercel.app/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#0f0c29",
