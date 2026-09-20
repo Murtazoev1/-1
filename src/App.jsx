@@ -385,15 +385,9 @@ function SpyLogo({ className = "" }) {
 
 function Screen({ children, className = "" }) {
   return (
-    <motion.main
-      className={"sw-screen " + className}
-      initial={{ opacity: 0, x: 28 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -28 }}
-      transition={{ duration: 0.32, ease: "easeOut" }}
-    >
+    <main className={"sw-screen " + className}>
       {children}
-    </motion.main>
+    </main>
   );
 }
 function Header({ title, onBack, right }) {
@@ -407,15 +401,14 @@ function Header({ title, onBack, right }) {
 }
 function Button({ children, onClick, primary, danger, disabled, className = "", style }) {
   return (
-    <motion.button
-      whileTap={{ scale: 0.96 }}
+    <button
       disabled={disabled}
       style={style}
       className={"sw-btn " + (primary ? "sw-btn-primary " : "") + (danger ? "sw-btn-danger " : "") + className}
       onClick={onClick}
     >
       {children}
-    </motion.button>
+    </button>
   );
 }
 function Toggle({ value, onChange, label }) {
@@ -572,7 +565,7 @@ function Home() {
           </motion.div>
         </div>
         <div className="sw-home-main">
-          <motion.h1 className="sw-title-pulse" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>{t.appName}</motion.h1>
+          <motion.h1 className="sw-title-pulse" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>{t.appName}</h1>
           <p className="sw-tagline">{t.tagline}</p>
           <div className="sw-menu">
             {[
@@ -583,13 +576,11 @@ function Home() {
             ].map((item, i) => (
               <motion.div
                 key={item.key}
-                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.09 }}
               >
                 <Button primary={item.primary} onClick={item.onClick} className="sw-menu-btn">
                   {item.icon} {item.label} {item.badge != null && <span className="sw-badge">{item.badge}</span>}
                 </Button>
-              </motion.div>
+              </div>
             ))}
           </div>
           <div className="sw-home-stats">
@@ -1425,36 +1416,28 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
   padding: 20px;
   text-align: center;
   border: 1px solid var(--glass-border);
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  /* без transition — без лагов и без синего микса */
 }
 .sw-card-front {
-  background: linear-gradient(160deg, rgba(167,139,250,0.25), rgba(45,212,191,0.15));
+  background: linear-gradient(160deg, rgba(167,139,250,0.35), rgba(45,212,191,0.2));
   font-size: 2.4rem;
-  opacity: 1;
-  transform: scale(1);
   z-index: 2;
 }
 .sw-card-front b { font-size: 1rem; }
 .sw-card-back {
-  background: linear-gradient(160deg, rgba(45,212,191,0.22), rgba(167,139,250,0.18));
-  opacity: 0;
-  transform: scale(0.97);
+  background: linear-gradient(160deg, rgba(30,20,60,0.95), rgba(45,30,80,0.95));
   z-index: 1;
-  pointer-events: none;
+  visibility: hidden;
 }
 .sw-secret-card.open .sw-card-front {
-  opacity: 0;
-  transform: scale(1.03);
-  pointer-events: none;
+  visibility: hidden;
 }
 .sw-secret-card.open .sw-card-back {
-  opacity: 1;
-  transform: scale(1);
+  visibility: visible;
   z-index: 3;
-  pointer-events: auto;
 }
 .sw-secret-card.spy .sw-card-back {
-  background: linear-gradient(160deg, rgba(190,24,93,0.35), rgba(124,58,237,0.3));
+  background: linear-gradient(160deg, rgba(80,15,50,0.95), rgba(60,20,90,0.95));
 }
 .sw-spy-big { font-size: 2.6rem; }
 .sw-theme-tag {
@@ -1731,9 +1714,7 @@ function Shell() {
         <div className="sw-rainbow" />
         <CitySkyline />
       </div>
-      <AnimatePresence mode="wait">
         {screens[state.screen] || <Home key="home" />}
-      </AnimatePresence>
     </div>
   );
 }
