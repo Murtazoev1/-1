@@ -1498,18 +1498,19 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 .sw-confetti { position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:5; }
 
 /* ============ TABLET / LANDSCAPE ============ */
-@media (min-width:768px) {
-  .sw-screen { padding:32px 40px 48px; max-width:min(90vw,760px); }
-  .sw-player-list { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-  .sw-theme-grid { grid-template-columns:repeat(4,1fr); }
-  .sw-settings-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
-  .sw-setting-row.full { grid-column:1/-1; }
-  .sw-emoji-grid { grid-template-columns:repeat(8,1fr); }
-  .sw-guess-grid { grid-template-columns:repeat(4,1fr); }
-  .sw-vote-grid { grid-template-columns:repeat(3,1fr); }
-  .sw-backdrop { align-items:center; }
-  .sw-modal { max-width:520px; border-radius:24px; max-height:80vh; }
-  .sw-secret-card { max-width:400px; }
+@media (min-width: 768px) {
+  .sw-screen {
+    padding: 28px 40px 40px;
+    max-width: min(90vw, 560px);
+  }
+  .sw-home .sw-emblem {
+    width: 120px;
+    height: 120px;
+  }
+  .sw-skyline {
+    height: clamp(100px, 16vh, 160px);
+  }
+  /* остальные ваши правила для tablet оставьте как есть */
 }
 @media (min-width:1024px) {
   .sw-screen { max-width:820px; }
