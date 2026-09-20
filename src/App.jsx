@@ -347,26 +347,39 @@ function GameProvider({ children }) {
 /* ============================== UI ATOMS ============================== */
 function SpyLogo({ className = "" }) {
   return (
-    <div className={`sw-skyline-wrapper ${className}`} style={{ width: '100%', overflow: 'hidden', lineHeight: 0, position: 'absolute', bottom: 0, left: 0, right: 0, pointerEvents: 'none' }}>
-      <svg 
-        viewBox="0 0 1200 200" 
-        preserveAspectRatio="xMidYMax meet" 
-        style={{ width: '100%', height: 'auto', display: 'block' }}
-      >
-        {/* Дальний слой зданий */}
-        <path 
-          d="M0,200 L0,150 L40,150 L40,120 L80,120 L80,200 L120,200 L120,90 L160,90 L160,200 L220,200 L220,70 L270,70 L270,200 L320,200 L320,130 L360,130 L360,200 L420,200 L420,60 L480,60 L480,200 L530,200 L530,110 L570,110 L570,200 L630,200 L630,80 L690,80 L690,200 L750,200 L750,100 L800,100 L800,200 L860,200 L860,50 L920,50 L920,200 L980,200 L980,120 L1030,120 L1030,200 L1100,200 L1100,90 L1150,90 L1150,200 L1200,200 Z" 
-          fill="currentColor" 
-          opacity="0.2"
-        />
-        {/* Ближний слой зданий */}
-        <path 
-          d="M0,200 L0,170 L30,170 L30,200 L90,200 L90,110 L130,110 L130,200 L180,200 L180,85 L230,85 L230,200 L300,200 L300,100 L340,100 L340,200 L400,200 L400,45 L460,45 L460,200 L510,200 L510,130 L550,130 L550,200 L610,200 L610,95 L670,95 L670,200 L730,200 L730,65 L790,65 L790,200 L840,200 L840,115 L880,115 L880,200 L950,200 L950,75 L1010,75 L1010,200 L1080,200 L1080,105 L1130,105 L1130,200 L1200,200 Z" 
-          fill="currentColor" 
-          opacity="0.35"
-        />
-      </svg>
-    </div>
+    <svg viewBox="0 0 200 200" className={"sw-logo-svg " + className} role="img" aria-label="Spy logo">
+      <defs>
+        <linearGradient id="spyBadgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#7c3aed" />
+          <stop offset="55%" stopColor="#c026d3" />
+          <stop offset="100%" stopColor="#f472b6" />
+        </linearGradient>
+        <radialGradient id="spyGlow" cx="32%" cy="26%" r="75%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="spyRimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#2dd4bf" />
+          <stop offset="100%" stopColor="#a78bfa" />
+        </linearGradient>
+      </defs>
+      <circle cx="100" cy="100" r="97" fill="url(#spyBadgeGrad)" />
+      <circle cx="100" cy="100" r="93" fill="none" stroke="url(#spyRimGrad)" strokeWidth="2.5" opacity="0.7" />
+      <circle cx="100" cy="100" r="97" fill="url(#spyGlow)" />
+      <path d="M38 182 Q100 138 162 182 L162 205 L38 205 Z" fill="#1c1730" />
+      <path d="M38 182 Q100 138 162 182" fill="none" stroke="#2d2650" strokeWidth="4" />
+      <ellipse cx="100" cy="118" rx="33" ry="35" fill="#f2c396" />
+      <ellipse cx="100" cy="128" rx="24" ry="10" fill="#e0a978" opacity="0.6" />
+      <ellipse cx="100" cy="90" rx="54" ry="13" fill="#181622" />
+      <path d="M70 92 Q73 54 100 51 Q127 54 130 92 Z" fill="#221f33" />
+      <path d="M76 85 h48 v7 h-48 z" fill="#3a3560" />
+      <rect x="68" y="108" width="26" height="15" rx="7" fill="#0d0d14" />
+      <rect x="106" y="108" width="26" height="15" rx="7" fill="#0d0d14" />
+      <rect x="94" y="112" width="12" height="4.5" rx="2" fill="#0d0d14" />
+      <circle cx="146" cy="150" r="21" fill="none" stroke="#fff" strokeWidth="7.5" />
+      <circle cx="146" cy="150" r="21" fill="#ffffff" opacity="0.08" />
+      <line x1="161" y1="165" x2="179" y2="183" stroke="#fff" strokeWidth="8.5" strokeLinecap="round" />
+    </svg>
   );
 }
 
