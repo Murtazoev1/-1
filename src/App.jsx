@@ -1197,17 +1197,16 @@ function StyleSheet() {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 0;          /* прижат к низу */
+  top: auto;          /* важно: не top: 0 */
   width: 100%;
-  height: 42vh;          /* базовая высота */
+  height: 42vh;
   min-height: 180px;
   max-height: 380px;
-  opacity: 0.7;
+  opacity: 0.75;
   pointer-events: none;
   z-index: 0;
-  display: flex;
-  align-items: flex-end;
-  /* ускорение отрисовки */
+  display: block;
   transform: translateZ(0);
   contain: layout paint;
 }
@@ -1220,45 +1219,38 @@ function StyleSheet() {
   opacity: 0.28;
 }
 
-/* ===== ТЕЛЕФОН ===== */
+/* Телефон */
 @media (max-width: 600px) {
   .sw-skyline {
-    height: 38vh;
-    min-height: 200px;
-    max-height: 320px;
-    opacity: 0.75;
+    height: 36vh;
+    min-height: 190px;
+    max-height: 300px;
   }
 }
 
-/* ===== ПЛАНШЕТ ===== */
+/* Планшет */
 @media (min-width: 601px) and (max-width: 1024px) {
   .sw-skyline {
-    height: 40vh;
-    min-height: 240px;
-    max-height: 400px;
-    opacity: 0.65;
-  }
-  .sw-screen {
-    max-width: 640px;
+    height: 38vh;
+    min-height: 220px;
+    max-height: 360px;
   }
 }
 
-/* ===== НОУТ / ПК — как у вас сейчас «круто» ===== */
+/* Ноут / ПК */
 @media (min-width: 1025px) {
   .sw-skyline {
-    height: 45vh;
-    min-height: 280px;
-    max-height: 460px;
-    opacity: 0.6;
+    height: 40vh;
+    min-height: 260px;
+    max-height: 420px;
   }
 }
 
-/* Очень низкий экран (горизонтальный телефон) */
+/* Горизонтальный телефон */
 @media (max-height: 500px) {
   .sw-skyline {
-    height: 28vh;
+    height: 30vh;
     min-height: 100px;
-    opacity: 0.5;
   }
 }
 .sw-screen {
@@ -1494,8 +1486,11 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 function CitySkyline() {
   return (
     <div className="sw-skyline" aria-hidden="true">
-      <svg
-        viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+   <svg
+  viewBox="0 0 1000 300"
+  preserveAspectRatio="xMidYMax meet"
+  xmlns="http://www.w3.org/2000/svg"
+>
         <defs>
           <linearGradient id="bldGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#1a1040"/>
