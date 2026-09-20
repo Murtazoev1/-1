@@ -1166,13 +1166,33 @@ function StyleSheet() {
   50% { background-position:100% 50%; }
   100% { background-position:0% 50%; }
 }
-.sw-skyline { position:absolute; left:0; right:0; bottom:0; height:clamp(160px,28vh,260px); opacity:0.75; pointer-events:none; }
-.sw-skyline svg { width:100%; height:100%; display:block; }
-.sw-app[data-spy-theme="light"] .sw-skyline { opacity:0.2; }
+.sw-skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(80px, 14vh, 140px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.sw-skyline svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.sw-app[data-spy-theme="light"] .sw-skyline {
+  opacity: 0.22;
+}
 
 .sw-screen {
-  position:relative; max-width:520px; margin:0 auto; padding:20px 20px 48px;
-  min-height:100dvh; display:flex; flex-direction:column; gap:14px;
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px 20px 24px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .sw-screen.sw-center { align-items:center; text-align:center; justify-content:flex-start; padding-top:40px; }
 /* Themes screen needs extra bottom padding for mobile scroll */
