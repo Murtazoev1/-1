@@ -1155,8 +1155,11 @@ function StyleSheet() {
 .sw-ambient { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
 .sw-rainbow {
   position:absolute; inset:-25%; z-index:-1;
-  background:linear-gradient(120deg,#ff3d81,#ff9a3d,#ffe23d,#5cff8f,#3ddcff,#7c5cff);
-  opacity:0.25; mix-blend-mode:screen;
+  background:linear-gradient(120deg,#ff3d81,#ff9a3d,#ffe23d,#5cff8f,#3ddcff,#7c5cff,#ff3d81,#ff9a3d,#ffe23d);
+  background-size:400% 400%;
+  filter:blur(60px) saturate(1.6);
+  opacity:0.4; mix-blend-mode:screen;
+  animation: sw-rainbow-flow 14s ease-in-out infinite, sw-rainbow-hue 20s linear infinite;
 }
 .sw-app[data-spy-theme="light"] .sw-rainbow { opacity:0.28; mix-blend-mode:multiply; }
 @keyframes sw-rainbow-flow {
