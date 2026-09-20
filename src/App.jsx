@@ -7,7 +7,7 @@ import {
   ShieldAlert, Search, PartyPopper, ChevronLeft, ChevronRight
 } from "lucide-react";
 
-/* ============================== DATA: 30 THEMES ============================== */
+/* ============================== DATA: 32 THEMES ============================== */
 const THEMES = [
   {id:"animals",emoji:"🐾",color:"#22c55e",name:{ru:"Животные",en:"Animals",tj:"Ҳайвонот"},words:{ru:["Жираф","Слон","Лев","Тигр","Зебра","Крокодил","Пингвин","Дельфин","Кит","Акула","Орёл","Сова","Волк","Лиса","Медведь","Панда","Коала","Кенгуру","Черепаха","Змея"],en:["Giraffe","Elephant","Lion","Tiger","Zebra","Crocodile","Penguin","Dolphin","Whale","Shark","Eagle","Owl","Wolf","Fox","Bear","Panda","Koala","Kangaroo","Turtle","Snake"],tj:["Зурофа","Фил","Шер","Паланг","Зебра","Тимсоҳ","Пингвин","Делфин","Наҳанг","Акула","Уқоб","Бум","Гург","Рӯбоҳ","Хирс","Панда","Коала","Кенгуру","Сангпушт","Мор"]}},
   {id:"food",emoji:"🍔",color:"#f97316",name:{ru:"Еда и напитки",en:"Food & Drinks",tj:"Хӯрок ва нӯшокӣ"},words:{ru:["Пицца","Суши","Борщ","Плов","Тако","Бургер","Паста","Шоколад","Мороженое","Кофе","Чай","Смузи","Блины","Пельмени","Салат","Стейк","Круассан","Мёд","Йогурт","Попкорн"],en:["Pizza","Sushi","Borscht","Pilaf","Taco","Burger","Pasta","Chocolate","Ice cream","Coffee","Tea","Smoothie","Pancakes","Dumplings","Salad","Steak","Croissant","Honey","Yogurt","Popcorn"],tj:["Питса","Суши","Борщ","Ош","Тако","Бургер","Макарон","Шоколад","Яхмос","Қаҳва","Чой","Смузи","Панкейк","Пелмени","Салат","Стейк","Круассан","Асал","Ҷурғот","Попкорн"]}},
@@ -509,7 +509,7 @@ function ThemePreviewModal({ open, onClose, theme, lang }) {
 }
 
 function Confetti({ variant = "players" }) {
-  const pieces = useMemo(() => Array.from({ length: 60 }, (_, i) => ({
+  const pieces = useMemo(() => Array.from({ length: 40 }, (_, i) => ({
     id: i, x: Math.random() * 100, delay: Math.random() * 0.6,
     rotate: Math.random() * 360, size: 6 + Math.random() * 8,
     duration: 2 + Math.random() * 1.4,
@@ -540,7 +540,6 @@ function Splash() {
   }, [state.loaded]);
   return (
     <Screen className="sw-splash">
-      <div className="sw-radar" />
       <motion.div
         className="sw-splash-logo"
         initial={{ scale: 0.8, opacity: 0 }}
@@ -561,7 +560,6 @@ function Home() {
   const canPlay = players.length >= 3 && themeIds.length >= 1;
   return (
     <Screen className="sw-home">
-      <div className="sw-radar" />
       <div className="sw-home-layout">
         <div className="sw-home-hero">
           <motion.div
@@ -708,13 +706,11 @@ function ThemesScreen() {
         </div>
       </div>
       <div className="sw-theme-grid">
-        {THEMES.map((th, i) => {
+        {THEMES.map((th) => {
           const active = themeIds.includes(th.id);
           return (
-            <motion.button
-              key={th.id} whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.012 }}
+            <button
+              key={th.id}
               className={"sw-theme-card " + (active ? "active" : "")}
               style={{ "--accent": th.color }}
               onClick={() => dispatch({ type: "TOGGLE_THEME", id: th.id })}
@@ -722,14 +718,12 @@ function ThemesScreen() {
               <button className="sw-theme-preview-btn" onClick={(e) => { e.stopPropagation(); setPreview(th); }}><Eye size={14} /></button>
               <span className="sw-theme-emoji">{th.emoji}</span>
               <b>{themeName(th, state.settings.language)}</b>
-              <AnimatePresence>
-                {active && (
-                  <motion.span className="sw-theme-check" initial={{ scale: 0 }} animate={{ scale: [0, 1.2, 1] }} exit={{ scale: 0 }}>
-                    <Check size={15} />
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
+              {active && (
+                <span className="sw-theme-check">
+                  <Check size={15} />
+                </span>
+              )}
+            </button>
           );
         })}
       </div>
@@ -751,7 +745,7 @@ function SettingsScreen() {
         <SettingRow icon={<Users size={18} />} title={t.spiesCount}>
           <div className="sw-stepper">
             <button onClick={() => upd({ spies: Math.max(1, settings.spies - 1) })}><Minus size={16} /></button>
-            <motion.b key={settings.spies}>{Math.min(settings.spies, maxSpies)}</motion.b>
+            <b>{Math.min(settings.spies, maxSpies)}</b>
             <button onClick={() => upd({ spies: Math.min(maxSpies, settings.spies + 1) })}><Plus size={16} /></button>
           </div>
         </SettingRow>
@@ -864,9 +858,9 @@ function Reveal() {
         <div className="sw-progress-track"><div className="sw-progress-fill" style={{ width: `${((round.revealIndex + 1) / round.revealOrder.length) * 100}%` }} /></div>
       </div>
       <div className="sw-pass-label">{t.passDevice}</div>
-      <motion.div className="sw-reveal-player" animate={{ rotate: [-3, 3, -3] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
+      <div className="sw-reveal-player">
         <span>{player.emoji}</span><b>{player.name}</b>
-      </motion.div>
+      </div>
       <p className="sw-muted">{t.holdToReveal}</p>
       <div
         className={"sw-secret-card " + (held ? "open" : "") + (isSpy ? " spy" : "")}
@@ -922,7 +916,6 @@ function TimerScreen() {
   const [guessOpen, setGuessOpen] = useState(false);
   const [exileBanner, setExileBanner] = useState(null);
   const [confirmLeave, setConfirmLeave] = useState(false);
-  const tickedRef = useRef(false);
 
   useEffect(() => {
     if (paused || round.finished || votingOpen || guessOpen) return;
@@ -1012,16 +1005,14 @@ function TimerScreen() {
       />
 
       <Modal open={guessOpen} onClose={() => setGuessOpen(false)} title={t.guessTitle} wide>
-        <GuessWordBody theme={theme} lang={lang} onGuess={(wordIndex) => { setGuessOpen(false); dispatch({ type: "SPY_GUESS", wordIndex }); }} />
+        <GuessWordBody theme={theme} lang={lang} correctIndex={round.wordIndex} onGuess={(wordIndex) => { setGuessOpen(false); dispatch({ type: "SPY_GUESS", wordIndex }); }} />
       </Modal>
 
-      <AnimatePresence>
-        {exileBanner && (
-          <motion.div className="sw-exile-banner" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}>
-            ❌ {exileBanner} — {t.notSpyBanner}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {exileBanner && (
+        <div className="sw-exile-banner">
+          ❌ {exileBanner} — {t.notSpyBanner}
+        </div>
+      )}
     </Screen>
   );
 }
@@ -1051,17 +1042,24 @@ function VotingBody({ players, exiledIds, allPlayers, onExile }) {
   );
 }
 
-function GuessWordBody({ theme, lang, onGuess }) {
+function GuessWordBody({ theme, lang, correctIndex, onGuess }) {
   const { t } = useGame();
   const words = themeWords(theme, lang);
   const [candidateIndex, setCandidateIndex] = useState(null);
   const [confirming, setConfirming] = useState(false);
+  const optionIndices = useMemo(() => {
+    const total = words.length;
+    const limit = Math.min(9, total);
+    const others = Array.from({ length: total }, (_, i) => i).filter((i) => i !== correctIndex);
+    const picked = shuffle(others).slice(0, limit - 1);
+    return shuffle([correctIndex, ...picked]);
+  }, [theme.id, lang, correctIndex]);
   return (
     <div>
       <p className="sw-muted">{t.guessSubtitle} {theme.emoji} {themeName(theme, lang)}</p>
       <div className="sw-guess-grid">
-        {words.map((w, i) => (
-          <button key={i} className="sw-guess-word" style={{ "--accent": theme.color }} onClick={() => { setCandidateIndex(i); setConfirming(true); }}>{w}</button>
+        {optionIndices.map((i) => (
+          <button key={i} className="sw-guess-word" style={{ "--accent": theme.color }} onClick={() => { setCandidateIndex(i); setConfirming(true); }}>{words[i]}</button>
         ))}
       </div>
       <ConfirmModal
@@ -1154,40 +1152,22 @@ function StyleSheet() {
 }
 .sw-ambient { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
 .sw-rainbow {
-  position:absolute; inset:-25%; z-index:-1;
-  background:linear-gradient(120deg,#ff3d81,#ff9a3d,#ffe23d,#5cff8f,#3ddcff,#7c5cff,#ff3d81,#ff9a3d,#ffe23d);
-  background-size:400% 400%;
-  filter:blur(60px) saturate(1.6);
-  opacity:0.4; mix-blend-mode:screen;
-  animation: sw-rainbow-flow 14s ease-in-out infinite, sw-rainbow-hue 20s linear infinite;
+  position:absolute; inset:-10% -10% 0 -10%; z-index:-1;
+  background:linear-gradient(120deg,#ff3d81,#7c5cff,#3ddcff,#5cff8f,#ffe23d,#ff9a3d,#ff3d81);
+  background-size:300% 300%;
+  opacity:0.16; mix-blend-mode:screen;
+  animation: sw-rainbow-flow 18s ease-in-out infinite;
+  will-change: background-position;
 }
-.sw-app[data-spy-theme="light"] .sw-rainbow { opacity:0.28; mix-blend-mode:multiply; }
+.sw-app[data-spy-theme="light"] .sw-rainbow { opacity:0.1; mix-blend-mode:multiply; }
 @keyframes sw-rainbow-flow {
   0% { background-position:0% 50%; }
   50% { background-position:100% 50%; }
   100% { background-position:0% 50%; }
 }
-@keyframes sw-rainbow-hue {
-  from { filter:blur(60px) saturate(1.6) hue-rotate(0deg); }
-  to { filter:blur(60px) saturate(1.6) hue-rotate(360deg); }
-}
-@keyframes sw-rainbow-flow {
-  0% { background-position:0% 50%; }
-  50% { background-position:100% 50%; }
-  100% { background-position:0% 50%; }
-}
-@keyframes sw-rainbow-hue {
-  from { filter:blur(60px) saturate(1.6) hue-rotate(0deg); }
-  to { filter:blur(60px) saturate(1.6) hue-rotate(360deg); }
-}
-.sw-radar { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:-1; pointer-events:none; overflow:hidden; }
-.sw-radar::before, .sw-radar::after {
-  content:""; position:absolute; border-radius:50%; border:1px solid rgba(167,139,250,0.18);
-  width:60vmax; height:60vmax; animation: sw-spin 26s linear infinite;
-}
-.sw-radar::after { width:90vmax; height:90vmax; animation-duration:38s; animation-direction:reverse; border-color:rgba(45,212,191,0.12); }
-@keyframes sw-spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-@keyframes sw-spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+.sw-skyline { position:absolute; left:0; right:0; bottom:0; height:22vh; min-height:120px; opacity:0.5; }
+.sw-skyline svg { width:100%; height:100%; display:block; }
+.sw-app[data-spy-theme="light"] .sw-skyline { opacity:0.22; }
 
 .sw-screen {
   position:relative; max-width:520px; margin:0 auto; padding:20px 20px 32px;
@@ -1201,17 +1181,16 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 /* Splash */
 .sw-splash { align-items:center; justify-content:center; text-align:center; }
 .sw-splash-logo .sw-logo-mark { width:clamp(120px,32vw,180px); height:clamp(120px,32vw,180px); margin:0 auto; }
-.sw-logo-svg { width:100%; height:100%; display:block; filter:drop-shadow(0 10px 26px rgba(124,58,237,0.45)); }
+.sw-logo-svg { width:100%; height:100%; display:block; }
 .sw-splash-logo h1 { font-size:clamp(1.8rem,6vw,2.4rem); letter-spacing:0.06em; margin-top:6px; }
 .sw-splash-logo p { color:var(--ink-dim); margin-top:6px; }
 
 /* Home */
 .sw-home { justify-content:center; }
 .sw-home-layout { display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; }
-.sw-emblem { position:relative; width:min(28vw,140px); height:min(28vw,140px); border-radius:50%; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle,rgba(167,139,250,0.35),transparent 70%); margin-bottom:6px; padding:6px; }
+.sw-emblem { position:relative; width:min(28vw,140px); height:min(28vw,140px); border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(167,139,250,0.18); margin-bottom:6px; padding:6px; }
 .sw-home-main { width:100%; max-width:420px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; margin:0 auto; }
-.sw-title-pulse { font-size:clamp(2.2rem,9vw,3rem); letter-spacing:0.08em; text-shadow:0 0 24px rgba(167,139,250,0.55); animation: sw-pulse 3.2s ease-in-out infinite; }
-@keyframes sw-pulse { 0%,100%{text-shadow:0 0 18px rgba(167,139,250,0.4)} 50%{text-shadow:0 0 32px rgba(167,139,250,0.75)} }
+.sw-title-pulse { font-size:clamp(2.2rem,9vw,3rem); letter-spacing:0.08em; text-shadow:0 0 24px rgba(167,139,250,0.5); }
 .sw-tagline { color:var(--ink-dim); margin-bottom:8px; }
 .sw-menu { width:100%; display:flex; flex-direction:column; gap:10px; margin-top:6px; }
 .sw-menu-btn { width:100%; justify-content:center; font-size:1.05rem; }
@@ -1222,11 +1201,10 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-btn {
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
   padding:14px 20px; border-radius:16px; border:1px solid var(--glass-border);
-  background:var(--glass); backdrop-filter:blur(14px); color:var(--ink);
+  background:var(--glass); color:var(--ink);
   font-weight:600; font-size:0.98rem; cursor:pointer; min-height:48px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.18); transition:box-shadow 0.15s, transform 0.1s;
+  box-shadow:0 6px 18px rgba(0,0,0,0.18);
 }
-.sw-btn:active { box-shadow:0 2px 6px rgba(0,0,0,0.2); }
 .sw-btn:disabled { opacity:0.4; cursor:not-allowed; }
 .sw-btn-primary { background:linear-gradient(135deg,var(--accent-violet),var(--accent-pink)); border:none; color:#fff; }
 .sw-btn-danger { background:linear-gradient(135deg,#ef4444,#b91c1c); border:none; color:#fff; }
@@ -1241,13 +1219,13 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 
 /* Toggle */
 .sw-toggle { display:inline-flex; align-items:center; gap:8px; border:none; background:rgba(255,255,255,0.12); border-radius:999px; width:52px; height:30px; padding:3px; cursor:pointer; position:relative; }
-.sw-toggle-knob { width:24px; height:24px; border-radius:50%; background:#fff; transition:transform 0.25s cubic-bezier(.4,1.6,.6,1); }
+.sw-toggle-knob { width:24px; height:24px; border-radius:50%; background:#fff; transition:transform 0.2s; }
 .sw-toggle.on { background:linear-gradient(135deg,var(--accent-violet),var(--accent-pink)); }
 .sw-toggle.on .sw-toggle-knob { transform:translateX(22px); }
 .sw-toggle em { font-style:normal; font-size:0.85rem; margin-left:4px; white-space:nowrap; }
 
 /* Modal */
-.sw-backdrop { position:fixed; inset:0; background:rgba(10,8,24,0.6); backdrop-filter:blur(3px); display:flex; align-items:flex-end; justify-content:center; z-index:100; }
+.sw-backdrop { position:fixed; inset:0; background:rgba(10,8,24,0.6); display:flex; align-items:flex-end; justify-content:center; z-index:100; }
 .sw-modal { width:100%; max-width:100%; background:var(--bg3); border:1px solid var(--glass-border); border-radius:24px 24px 0 0; padding:18px 18px 26px; max-height:82vh; overflow-y:auto; }
 .sw-modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .sw-modal-actions { display:flex; gap:10px; margin-top:16px; }
@@ -1303,13 +1281,11 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-setting-main { flex:1; display:flex; flex-direction:column; gap:8px; }
 .sw-setting-row.full { flex-direction:column; align-items:stretch; }
 .sw-setting-control { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-.sw-stepper { display:flex; align-items:center; gap:12px; }
+.sw-stepper { display:flex; align-items:center; justify-content:center; gap:16px; width:100%; }
+.sw-stepper b { min-width:24px; text-align:center; font-size:1.15rem; }
 .sw-stepper button { width:34px; height:34px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:var(--ink); cursor:pointer; }
 .sw-range-value { font-weight:700; }
 input[type="range"] { width:100%; accent-color:var(--accent-violet); }
-.sw-segmented { display:flex; gap:6px; flex-wrap:wrap; }
-.sw-segmented button { flex:1; min-width:90px; background:rgba(255,255,255,0.06); border:1px solid transparent; border-radius:10px; padding:9px 6px; font-size:0.78rem; color:var(--ink-dim); cursor:pointer; }
-.sw-segmented button.active { background:linear-gradient(135deg,var(--accent-violet),var(--accent-pink)); color:#fff; }
 
 .sw-stacked-options { display:flex; flex-direction:column; gap:8px; width:100%; }
 .sw-stacked-options button { width:100%; text-align:center; background:rgba(255,255,255,0.06); border:1px solid transparent; border-radius:12px; padding:12px 14px; font-size:0.9rem; font-weight:600; color:var(--ink-dim); cursor:pointer; line-height:1.3; }
@@ -1357,8 +1333,7 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 .sw-progress-ring { fill:none; stroke:var(--accent-green); stroke-width:12; stroke-linecap:round; transition:stroke-dashoffset 1s linear, stroke 0.3s; }
 .sw-progress-ring.urgent { stroke:var(--accent-red); }
 .sw-timer-digits { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:clamp(1.8rem,8vw,2.6rem); font-weight:800; font-family:'Manrope',sans-serif; }
-.sw-timer-digits.urgent { animation:sw-urgent-pulse 1s infinite; color:var(--accent-red); }
-@keyframes sw-urgent-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+.sw-timer-digits.urgent { color:var(--accent-red); }
 .sw-timer-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
 .sw-exiled-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
 .sw-exiled-chip { background:rgba(255,255,255,0.08); color:var(--ink-dim); padding:6px 10px; border-radius:999px; font-size:0.78rem; text-decoration:line-through; }
@@ -1415,14 +1390,79 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
   .sw-screen { max-width:900px; }
   .sw-theme-grid { grid-template-columns:repeat(6,1fr); }
 }
-@media (orientation:landscape) and (min-width:768px) and (max-height:520px) {
-  .sw-screen.sw-center { flex-direction:row; flex-wrap:wrap; align-items:center; justify-content:center; gap:32px; }
-  .sw-timer-actions { flex-direction:column; }
-}
 @media (prefers-reduced-motion:reduce) {
   * { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
 }
     `}</style>
+  );
+}
+
+function CitySkyline() {
+  return (
+    <div className="sw-skyline" aria-hidden="true">
+      <svg viewBox="0 0 900 260" preserveAspectRatio="xMidYMax slice">
+        <g fill="#150f2e">
+          <rect x="0" y="150" width="30" height="110" />
+          <rect x="34" y="170" width="22" height="90" />
+          <rect x="60" y="130" width="34" height="130" />
+          <rect x="98" y="185" width="18" height="75" />
+          <rect x="120" y="120" width="56" height="140" />
+
+          <rect x="180" y="90" width="70" height="170" />
+          <rect x="192" y="55" width="46" height="35" />
+          <rect x="200" y="30" width="30" height="25" />
+          <rect x="207" y="8" width="16" height="22" />
+          <polygon points="211,8 219,8 215,-14" />
+
+          <rect x="258" y="140" width="30" height="120" />
+          <rect x="292" y="165" width="20" height="95" />
+          <rect x="316" y="115" width="46" height="145" />
+
+          <rect x="372" y="95" width="60" height="165" />
+          <rect x="382" y="75" width="40" height="20" />
+
+          <rect x="440" y="150" width="26" height="110" />
+          <rect x="466" y="90" width="40" height="60" />
+          <polygon points="462,90 510,90 486,10" />
+          <rect x="481" y="0" width="10" height="14" />
+
+          <rect x="522" y="175" width="34" height="85" />
+          <rect x="560" y="190" width="60" height="70" />
+          <path d="M 560 190 a 30 30 0 0 1 60 0 z" />
+          <rect x="586" y="140" width="8" height="45" />
+
+          <rect x="632" y="100" width="66" height="160" />
+          <polygon points="632,100 665,58 698,100" />
+
+          <rect x="706" y="150" width="28" height="110" />
+          <rect x="738" y="190" width="20" height="70" />
+          <rect x="762" y="160" width="40" height="100" />
+          <rect x="806" y="200" width="26" height="60" />
+          <rect x="836" y="175" width="34" height="85" />
+          <rect x="874" y="205" width="26" height="55" />
+        </g>
+        <g fill="#f472b6" opacity="0.45">
+          <rect x="66" y="150" width="6" height="8" /><rect x="78" y="150" width="6" height="8" />
+          <rect x="66" y="175" width="6" height="8" /><rect x="78" y="175" width="6" height="8" />
+          <rect x="126" y="145" width="6" height="8" /><rect x="140" y="145" width="6" height="8" /><rect x="154" y="145" width="6" height="8" /><rect x="168" y="145" width="6" height="8" />
+          <rect x="126" y="170" width="6" height="8" /><rect x="140" y="170" width="6" height="8" /><rect x="154" y="170" width="6" height="8" /><rect x="168" y="170" width="6" height="8" />
+          <rect x="126" y="195" width="6" height="8" /><rect x="140" y="195" width="6" height="8" /><rect x="154" y="195" width="6" height="8" /><rect x="168" y="195" width="6" height="8" />
+          <rect x="196" y="105" width="6" height="8" /><rect x="210" y="105" width="6" height="8" /><rect x="224" y="105" width="6" height="8" /><rect x="238" y="105" width="6" height="8" />
+          <rect x="196" y="130" width="6" height="8" /><rect x="210" y="130" width="6" height="8" /><rect x="224" y="130" width="6" height="8" /><rect x="238" y="130" width="6" height="8" />
+          <rect x="196" y="155" width="6" height="8" /><rect x="210" y="155" width="6" height="8" /><rect x="224" y="155" width="6" height="8" /><rect x="238" y="155" width="6" height="8" />
+          <rect x="322" y="130" width="6" height="8" /><rect x="336" y="130" width="6" height="8" /><rect x="350" y="130" width="6" height="8" />
+          <rect x="322" y="155" width="6" height="8" /><rect x="336" y="155" width="6" height="8" /><rect x="350" y="155" width="6" height="8" />
+          <rect x="322" y="180" width="6" height="8" /><rect x="336" y="180" width="6" height="8" /><rect x="350" y="180" width="6" height="8" />
+          <rect x="382" y="110" width="6" height="8" /><rect x="396" y="110" width="6" height="8" /><rect x="410" y="110" width="6" height="8" /><rect x="424" y="110" width="6" height="8" />
+          <rect x="382" y="135" width="6" height="8" /><rect x="396" y="135" width="6" height="8" /><rect x="410" y="135" width="6" height="8" /><rect x="424" y="135" width="6" height="8" />
+          <rect x="382" y="160" width="6" height="8" /><rect x="396" y="160" width="6" height="8" /><rect x="410" y="160" width="6" height="8" /><rect x="424" y="160" width="6" height="8" />
+          <rect x="640" y="115" width="6" height="8" /><rect x="654" y="115" width="6" height="8" /><rect x="668" y="115" width="6" height="8" /><rect x="682" y="115" width="6" height="8" />
+          <rect x="640" y="140" width="6" height="8" /><rect x="654" y="140" width="6" height="8" /><rect x="668" y="140" width="6" height="8" /><rect x="682" y="140" width="6" height="8" />
+          <rect x="640" y="165" width="6" height="8" /><rect x="654" y="165" width="6" height="8" /><rect x="668" y="165" width="6" height="8" /><rect x="682" y="165" width="6" height="8" />
+          <rect x="640" y="190" width="6" height="8" /><rect x="654" y="190" width="6" height="8" /><rect x="668" y="190" width="6" height="8" /><rect x="682" y="190" width="6" height="8" />
+        </g>
+      </svg>
+    </div>
   );
 }
 
@@ -1445,6 +1485,7 @@ function Shell() {
       <StyleSheet />
       <div className="sw-ambient">
         <div className="sw-rainbow" />
+        <CitySkyline />
       </div>
       <AnimatePresence mode="wait">
         {screens[state.screen] || <Home key="home" />}
