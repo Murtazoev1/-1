@@ -3,6 +3,6 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.spy.game",
-    "sha256_cert_fingerprints": ["1F:8F:A3:6A:3B:DF:6C:0B:B8:DA:67:A7:3E:57:2F:DF:E7:96:CE:C8:92:7C:8A:C3:B1:B3:29:D0:C1:CE:85:3A"]
+    "sha256_cert_fingerprints": ["95:99:87:20:39:D3:89:3E:21:59:2F:44:C3:93:D5:DA:01:15:2A:7C:CD:06:A2:9D:6A:8D:85:99:9A:33:16:F8"]
   }
 }]
