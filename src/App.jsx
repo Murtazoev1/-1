@@ -1440,7 +1440,8 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 function CitySkyline() {
   return (
     <div className="sw-skyline" aria-hidden="true">
-      <svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+     <svg
+        viewBox="0 0 1000 300"preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="bldGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#1a1040"/>
