@@ -1153,18 +1153,31 @@ function StyleSheet() {
 }
 .sw-ambient { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
 .sw-rainbow {
-  position:absolute; inset:-10% -10% 0 -10%; z-index:-1;
-  background:linear-gradient(120deg,#ff3d81,#7c5cff,#3ddcff,#5cff8f,#ffe23d,#ff9a3d,#ff3d81);
-  background-size:300% 300%;
-  opacity:0.16; mix-blend-mode:screen;
-  animation: sw-rainbow-flow 18s ease-in-out infinite;
-  will-change: background-position;
+  position: absolute;
+  inset: -10% -10% 0 -10%;
+  z-index: -1;
+  background: linear-gradient(120deg, #ff3d81, #7c5cff, #3ddcff, #5cff8f, #ffe23d, #ff9a3d, #ff3d81);
+  background-size: 300% 300%;
+  opacity: 0.14;
+  mix-blend-mode: screen;
+  /* анимация только на десктопе */
+  animation: none;
 }
-.sw-app[data-spy-theme="light"] .sw-rainbow { opacity:0.1; mix-blend-mode:multiply; }
+.sw-app[data-spy-theme="light"] .sw-rainbow {
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+}
+
+/* Анимация радуги — только широкие экраны без reduced-motion */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .sw-rainbow {
+    animation: sw-rainbow-flow 22s ease-in-out infinite;
+  }
+}
 @keyframes sw-rainbow-flow {
-  0% { background-position:0% 50%; }
-  50% { background-position:100% 50%; }
-  100% { background-position:0% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 .sw-skyline {
   position: absolute;
@@ -1180,33 +1193,74 @@ function StyleSheet() {
   display: flex;
   align-items: flex-end;     /* здания прижаты к низу */
 }
+.sw-skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 42vh;          /* базовая высота */
+  min-height: 180px;
+  max-height: 380px;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  align-items: flex-end;
+  /* ускорение отрисовки */
+  transform: translateZ(0);
+  contain: layout paint;
+}
 .sw-skyline svg {
   width: 100%;
-  height: 55%;               /* высота силуэта ~половина экрана */
-  min-height: 220px;
-  max-height: 420px;
+  height: 100%;
   display: block;
-  object-fit: cover;
 }
 .sw-app[data-spy-theme="light"] .sw-skyline {
-  opacity: 0.25;
+  opacity: 0.28;
 }
 
-/* На телефоне город крупнее */
+/* ===== ТЕЛЕФОН ===== */
 @media (max-width: 600px) {
-  .sw-skyline svg {
-    height: 48%;
+  .sw-skyline {
+    height: 38vh;
     min-height: 200px;
+    max-height: 320px;
+    opacity: 0.75;
   }
 }
 
-@media (max-height: 700px) {
-  .sw-skyline svg {
-    height: 42%;
-    min-height: 160px;
+/* ===== ПЛАНШЕТ ===== */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .sw-skyline {
+    height: 40vh;
+    min-height: 240px;
+    max-height: 400px;
+    opacity: 0.65;
+  }
+  .sw-screen {
+    max-width: 640px;
   }
 }
 
+/* ===== НОУТ / ПК — как у вас сейчас «круто» ===== */
+@media (min-width: 1025px) {
+  .sw-skyline {
+    height: 45vh;
+    min-height: 280px;
+    max-height: 460px;
+    opacity: 0.6;
+  }
+}
+
+/* Очень низкий экран (горизонтальный телефон) */
+@media (max-height: 500px) {
+  .sw-skyline {
+    height: 28vh;
+    min-height: 100px;
+    opacity: 0.5;
+  }
+}
 .sw-screen {
   position:relative; max-width:520px; margin:0 auto; padding:20px 20px 48px;
   min-height:100dvh; display:flex; flex-direction:column; gap:14px;
@@ -1440,8 +1494,8 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 function CitySkyline() {
   return (
     <div className="sw-skyline" aria-hidden="true">
-     <svg
-        viewBox="0 0 1000 300"preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        viewBox="0 0 1000 300" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="bldGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#1a1040"/>
