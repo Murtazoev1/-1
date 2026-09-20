@@ -1399,68 +1399,24 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 
 function CitySkyline() {
   return (
-    <div className="sw-skyline" aria-hidden="true">
-      <svg viewBox="0 0 900 260" preserveAspectRatio="xMidYMax slice">
-        <g fill="#150f2e">
-          <rect x="0" y="150" width="30" height="110" />
-          <rect x="34" y="170" width="22" height="90" />
-          <rect x="60" y="130" width="34" height="130" />
-          <rect x="98" y="185" width="18" height="75" />
-          <rect x="120" y="120" width="56" height="140" />
-
-          <rect x="180" y="90" width="70" height="170" />
-          <rect x="192" y="55" width="46" height="35" />
-          <rect x="200" y="30" width="30" height="25" />
-          <rect x="207" y="8" width="16" height="22" />
-          <polygon points="211,8 219,8 215,-14" />
-
-          <rect x="258" y="140" width="30" height="120" />
-          <rect x="292" y="165" width="20" height="95" />
-          <rect x="316" y="115" width="46" height="145" />
-
-          <rect x="372" y="95" width="60" height="165" />
-          <rect x="382" y="75" width="40" height="20" />
-
-          <rect x="440" y="150" width="26" height="110" />
-          <rect x="466" y="90" width="40" height="60" />
-          <polygon points="462,90 510,90 486,10" />
-          <rect x="481" y="0" width="10" height="14" />
-
-          <rect x="522" y="175" width="34" height="85" />
-          <rect x="560" y="190" width="60" height="70" />
-          <path d="M 560 190 a 30 30 0 0 1 60 0 z" />
-          <rect x="586" y="140" width="8" height="45" />
-
-          <rect x="632" y="100" width="66" height="160" />
-          <polygon points="632,100 665,58 698,100" />
-
-          <rect x="706" y="150" width="28" height="110" />
-          <rect x="738" y="190" width="20" height="70" />
-          <rect x="762" y="160" width="40" height="100" />
-          <rect x="806" y="200" width="26" height="60" />
-          <rect x="836" y="175" width="34" height="85" />
-          <rect x="874" y="205" width="26" height="55" />
-        </g>
-        <g fill="#f472b6" opacity="0.45">
-          <rect x="66" y="150" width="6" height="8" /><rect x="78" y="150" width="6" height="8" />
-          <rect x="66" y="175" width="6" height="8" /><rect x="78" y="175" width="6" height="8" />
-          <rect x="126" y="145" width="6" height="8" /><rect x="140" y="145" width="6" height="8" /><rect x="154" y="145" width="6" height="8" /><rect x="168" y="145" width="6" height="8" />
-          <rect x="126" y="170" width="6" height="8" /><rect x="140" y="170" width="6" height="8" /><rect x="154" y="170" width="6" height="8" /><rect x="168" y="170" width="6" height="8" />
-          <rect x="126" y="195" width="6" height="8" /><rect x="140" y="195" width="6" height="8" /><rect x="154" y="195" width="6" height="8" /><rect x="168" y="195" width="6" height="8" />
-          <rect x="196" y="105" width="6" height="8" /><rect x="210" y="105" width="6" height="8" /><rect x="224" y="105" width="6" height="8" /><rect x="238" y="105" width="6" height="8" />
-          <rect x="196" y="130" width="6" height="8" /><rect x="210" y="130" width="6" height="8" /><rect x="224" y="130" width="6" height="8" /><rect x="238" y="130" width="6" height="8" />
-          <rect x="196" y="155" width="6" height="8" /><rect x="210" y="155" width="6" height="8" /><rect x="224" y="155" width="6" height="8" /><rect x="238" y="155" width="6" height="8" />
-          <rect x="322" y="130" width="6" height="8" /><rect x="336" y="130" width="6" height="8" /><rect x="350" y="130" width="6" height="8" />
-          <rect x="322" y="155" width="6" height="8" /><rect x="336" y="155" width="6" height="8" /><rect x="350" y="155" width="6" height="8" />
-          <rect x="322" y="180" width="6" height="8" /><rect x="336" y="180" width="6" height="8" /><rect x="350" y="180" width="6" height="8" />
-          <rect x="382" y="110" width="6" height="8" /><rect x="396" y="110" width="6" height="8" /><rect x="410" y="110" width="6" height="8" /><rect x="424" y="110" width="6" height="8" />
-          <rect x="382" y="135" width="6" height="8" /><rect x="396" y="135" width="6" height="8" /><rect x="410" y="135" width="6" height="8" /><rect x="424" y="135" width="6" height="8" />
-          <rect x="382" y="160" width="6" height="8" /><rect x="396" y="160" width="6" height="8" /><rect x="410" y="160" width="6" height="8" /><rect x="424" y="160" width="6" height="8" />
-          <rect x="640" y="115" width="6" height="8" /><rect x="654" y="115" width="6" height="8" /><rect x="668" y="115" width="6" height="8" /><rect x="682" y="115" width="6" height="8" />
-          <rect x="640" y="140" width="6" height="8" /><rect x="654" y="140" width="6" height="8" /><rect x="668" y="140" width="6" height="8" /><rect x="682" y="140" width="6" height="8" />
-          <rect x="640" y="165" width="6" height="8" /><rect x="654" y="165" width="6" height="8" /><rect x="668" y="165" width="6" height="8" /><rect x="682" y="165" width="6" height="8" />
-          <rect x="640" y="190" width="6" height="8" /><rect x="654" y="190" width="6" height="8" /><rect x="668" y="190" width="6" height="8" /><rect x="682" y="190" width="6" height="8" />
-        </g>
+    <div className={`sw-skyline-wrapper ${className}`} style={{ width: '100%', overflow: 'hidden', lineHeight: 0, position: 'absolute', bottom: 0, left: 0, right: 0, pointerEvents: 'none' }}>
+      <svg 
+        viewBox="0 0 1200 200" 
+        preserveAspectRatio="xMidYMax meet" 
+        style={{ width: '100%', height: 'auto', display: 'block' }}
+      >
+        {/* Дальний слой зданий */}
+        <path 
+          d="M0,200 L0,150 L40,150 L40,120 L80,120 L80,200 L120,200 L120,90 L160,90 L160,200 L220,200 L220,70 L270,70 L270,200 L320,200 L320,130 L360,130 L360,200 L420,200 L420,60 L480,60 L480,200 L530,200 L530,110 L570,110 L570,200 L630,200 L630,80 L690,80 L690,200 L750,200 L750,100 L800,100 L800,200 L860,200 L860,50 L920,50 L920,200 L980,200 L980,120 L1030,120 L1030,200 L1100,200 L1100,90 L1150,90 L1150,200 L1200,200 Z" 
+          fill="currentColor" 
+          opacity="0.2"
+        />
+        {/* Ближний слой зданий */}
+        <path 
+          d="M0,200 L0,170 L30,170 L30,200 L90,200 L90,110 L130,110 L130,200 L180,200 L180,85 L230,85 L230,200 L300,200 L300,100 L340,100 L340,200 L400,200 L400,45 L460,45 L460,200 L510,200 L510,130 L550,130 L550,200 L610,200 L610,95 L670,95 L670,200 L730,200 L730,65 L790,65 L790,200 L840,200 L840,115 L880,115 L880,200 L950,200 L950,75 L1010,75 L1010,200 L1080,200 L1080,105 L1130,105 L1130,200 L1200,200 Z" 
+          fill="currentColor" 
+          opacity="0.35"
+        />
       </svg>
     </div>
   );
