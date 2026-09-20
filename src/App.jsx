@@ -1171,28 +1171,45 @@ function StyleSheet() {
   left: 0;
   right: 0;
   bottom: 0;
-  height: clamp(80px, 14vh, 140px);
-  opacity: 0.7;
+  top: 0;                    /* на весь экран */
+  height: auto;
+  width: 100%;
+  opacity: 0.55;
   pointer-events: none;
+  z-index: 0;
+  display: flex;
+  align-items: flex-end;     /* здания прижаты к низу */
 }
 .sw-skyline svg {
   width: 100%;
-  height: 100%;
+  height: 55%;               /* высота силуэта ~половина экрана */
+  min-height: 220px;
+  max-height: 420px;
   display: block;
+  object-fit: cover;
 }
 .sw-app[data-spy-theme="light"] .sw-skyline {
-  opacity: 0.22;
+  opacity: 0.25;
+}
+
+/* На телефоне город крупнее */
+@media (max-width: 600px) {
+  .sw-skyline svg {
+    height: 48%;
+    min-height: 200px;
+  }
+}
+
+@media (max-height: 700px) {
+  .sw-skyline svg {
+    height: 42%;
+    min-height: 160px;
+  }
 }
 
 .sw-screen {
-  position: relative;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 16px 20px 24px;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  position:relative; max-width:520px; margin:0 auto; padding:20px 20px 48px;
+  min-height:100dvh; display:flex; flex-direction:column; gap:14px;
 }
 .sw-screen.sw-center { align-items:center; text-align:center; justify-content:flex-start; padding-top:40px; }
 /* Themes screen needs extra bottom padding for mobile scroll */
@@ -1208,125 +1225,17 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-splash-logo h1 { font-size:clamp(1.8rem,6vw,2.4rem); letter-spacing:0.06em; margin-top:6px; }
 .sw-splash-logo p { color:var(--ink-dim); margin-top:6px; }
 
-/* Home — всё влезает без скролла */
-.sw-home {
-  justify-content: center;
-  height: 100dvh;
-  min-height: 100dvh;
-  max-height: 100dvh;
-  overflow: hidden;
-  padding-top: max(8px, env(safe-area-inset-top));
-  padding-bottom: max(8px, env(safe-area-inset-bottom));
-}
-.sw-home-layout {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  width: 100%;
-  flex: 1;
-  max-height: 100%;
-}
-.sw-emblem {
-  position: relative;
-  width: min(20vw, 100px);
-  height: min(20vw, 100px);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(167, 139, 250, 0.18);
-  margin-bottom: 2px;
-  padding: 4px;
-  flex-shrink: 0;
-}
-.sw-home-main {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 4px;
-  margin: 0 auto;
-}
-.sw-title-pulse {
-  font-size: clamp(1.8rem, 7vw, 2.5rem);
-  letter-spacing: 0.06em;
-  text-shadow: 0 0 24px rgba(167, 139, 250, 0.5);
-}
-.sw-tagline {
-  color: var(--ink-dim);
-  margin-bottom: 4px;
-  font-size: 0.9rem;
-}
-.sw-menu {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 4px;
-}
-.sw-menu-btn {
-  width: 100%;
-  justify-content: center;
-  font-size: 1rem;
-  min-height: 46px;
-  padding: 12px 18px;
-}
-.sw-badge {
-  background: rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  padding: 1px 9px;
-  font-size: 0.8rem;
-  margin-left: 6px;
-}
-.sw-home-stats {
-  display: flex;
-  gap: 14px;
-  margin-top: 8px;
-  color: var(--ink-dim);
-  font-size: 0.8rem;
-}
-
-/* Короткие экраны (телефон в портрете / с панелями браузера) */
-@media (max-height: 700px) {
-  .sw-emblem {
-    width: min(18vw, 88px);
-    height: min(18vw, 88px);
-  }
-  .sw-title-pulse {
-    font-size: clamp(1.6rem, 6.5vw, 2.1rem);
-  }
-  .sw-menu {
-    gap: 6px;
-  }
-  .sw-menu-btn {
-    min-height: 42px;
-    padding: 10px 16px;
-  }
-  .sw-skyline {
-    height: clamp(60px, 11vh, 100px);
-  }
-  .sw-home-stats {
-    margin-top: 6px;
-  }
-}
-
-@media (max-height: 560px) {
-  .sw-emblem {
-    width: 72px;
-    height: 72px;
-  }
-  .sw-skyline {
-    height: 50px;
-    opacity: 0.5;
-  }
-  .sw-tagline {
-    display: none; /* на очень низких экранах скрываем подзаголовок */
-  }
-}
+/* Home */
+.sw-home { justify-content:center; }
+.sw-home-layout { display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; }
+.sw-emblem { position:relative; width:min(28vw,140px); height:min(28vw,140px); border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(167,139,250,0.18); margin-bottom:6px; padding:6px; }
+.sw-home-main { width:100%; max-width:420px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; margin:0 auto; }
+.sw-title-pulse { font-size:clamp(2.2rem,9vw,3rem); letter-spacing:0.08em; text-shadow:0 0 24px rgba(167,139,250,0.5); }
+.sw-tagline { color:var(--ink-dim); margin-bottom:8px; }
+.sw-menu { width:100%; display:flex; flex-direction:column; gap:10px; margin-top:6px; }
+.sw-menu-btn { width:100%; justify-content:center; font-size:1.05rem; }
+.sw-badge { background:rgba(255,255,255,0.18); border-radius:999px; padding:1px 9px; font-size:0.8rem; margin-left:6px; }
+.sw-home-stats { display:flex; gap:16px; margin-top:14px; color:var(--ink-dim); font-size:0.85rem; }
 
 /* Buttons */
 .sw-btn {
@@ -1498,19 +1407,18 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 .sw-confetti { position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:5; }
 
 /* ============ TABLET / LANDSCAPE ============ */
-@media (min-width: 768px) {
-  .sw-screen {
-    padding: 28px 40px 40px;
-    max-width: min(90vw, 560px);
-  }
-  .sw-home .sw-emblem {
-    width: 120px;
-    height: 120px;
-  }
-  .sw-skyline {
-    height: clamp(100px, 16vh, 160px);
-  }
-  /* остальные ваши правила для tablet оставьте как есть */
+@media (min-width:768px) {
+  .sw-screen { padding:32px 40px 48px; max-width:min(90vw,760px); }
+  .sw-player-list { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  .sw-theme-grid { grid-template-columns:repeat(4,1fr); }
+  .sw-settings-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .sw-setting-row.full { grid-column:1/-1; }
+  .sw-emoji-grid { grid-template-columns:repeat(8,1fr); }
+  .sw-guess-grid { grid-template-columns:repeat(4,1fr); }
+  .sw-vote-grid { grid-template-columns:repeat(3,1fr); }
+  .sw-backdrop { align-items:center; }
+  .sw-modal { max-width:520px; border-radius:24px; max-height:80vh; }
+  .sw-secret-card { max-width:400px; }
 }
 @media (min-width:1024px) {
   .sw-screen { max-width:820px; }
