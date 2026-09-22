@@ -6,8 +6,157 @@ import {
   ShieldAlert, Search
 } from "lucide-react";
 
-/* ============ ВСТАВЬ СЮДА БЕЗ ИЗМЕНЕНИЙ: const THEMES = [...] и функции themeName / themeWords ============ */
-/* ============ ВСТАВЬ СЮДА БЕЗ ИЗМЕНЕНИЙ: const STRINGS = {...} и const EMOJIS = [...] ============ */
+/* ============================== DATA: 32 THEMES ============================== */
+const THEMES = [
+  {id:"animals",emoji:"🐾",color:"#22c55e",name:{ru:"Животные",en:"Animals",tj:"Ҳайвонот"},words:{ru:["Жираф","Слон","Лев","Тигр","Зебра","Крокодил","Пингвин","Дельфин","Кит","Акула","Орёл","Сова","Волк","Лиса","Медведь","Панда","Коала","Кенгуру","Черепаха","Змея"],en:["Giraffe","Elephant","Lion","Tiger","Zebra","Crocodile","Penguin","Dolphin","Whale","Shark","Eagle","Owl","Wolf","Fox","Bear","Panda","Koala","Kangaroo","Turtle","Snake"],tj:["Зурофа","Фил","Шер","Паланг","Зебра","Тимсоҳ","Пингвин","Делфин","Наҳанг","Акула","Уқоб","Бум","Гург","Рӯбоҳ","Хирс","Панда","Коала","Кенгуру","Сангпушт","Мор"]}},
+  {id:"food",emoji:"🍔",color:"#f97316",name:{ru:"Еда и напитки",en:"Food & Drinks",tj:"Хӯрок ва нӯшокӣ"},words:{ru:["Пицца","Суши","Борщ","Плов","Тако","Бургер","Паста","Шоколад","Мороженое","Кофе","Чай","Смузи","Блины","Пельмени","Салат","Стейк","Круассан","Мёд","Йогурт","Попкорн"],en:["Pizza","Sushi","Borscht","Pilaf","Taco","Burger","Pasta","Chocolate","Ice cream","Coffee","Tea","Smoothie","Pancakes","Dumplings","Salad","Steak","Croissant","Honey","Yogurt","Popcorn"],tj:["Питса","Суши","Борщ","Ош","Тако","Бургер","Макарон","Шоколад","Яхмос","Қаҳва","Чой","Смузи","Панкейк","Пелмени","Салат","Стейк","Круассан","Асал","Ҷурғот","Попкорн"]}},
+  {id:"professions",emoji:"👷",color:"#3b82f6",name:{ru:"Профессии",en:"Professions",tj:"Касбҳо"},words:{ru:["Врач","Учитель","Пожарный","Пилот","Повар","Программист","Актёр","Музыкант","Полицейский","Строитель","Фермер","Журналист","Юрист","Парикмахер","Архитектор","Ветеринар","Астронавт","Художник","Электрик","Садовник"],en:["Doctor","Teacher","Firefighter","Pilot","Chef","Programmer","Actor","Musician","Police officer","Builder","Farmer","Journalist","Lawyer","Hairdresser","Architect","Veterinarian","Astronaut","Artist","Electrician","Gardener"],tj:["Табиб","Муаллим","Оташнишон","Халабон","Ошпаз","Барномасоз","Актёр","Мусиқачӣ","Милитсионер","Бинокор","Деҳқон","Рӯзноманигор","Ҳуқуқшинос","Сартарош","Меъмор","Духтури байторӣ","Астронавт","Рассом","Барқчӣ","Боғбон"]}},
+  {id:"sport",emoji:"⚽",color:"#ef4444",name:{ru:"Спорт",en:"Sport",tj:"Варзиш"},words:{ru:["Футбол","Баскетбол","Теннис","Плавание","Бокс","Хоккей","Волейбол","Гимнастика","Бег","Йога","Лыжи","Сёрфинг","Дзюдо","Гольф","Бадминтон","Регби","Скалолазание","Фигурное катание","Велоспорт","Стрельба из лука"],en:["Football","Basketball","Tennis","Swimming","Boxing","Hockey","Volleyball","Gymnastics","Running","Yoga","Skiing","Surfing","Judo","Golf","Badminton","Rugby","Rock climbing","Figure skating","Cycling","Archery"],tj:["Футбол","Баскетбол","Теннис","Шиноварӣ","Бокс","Хоккей","Волейбол","Гимнастика","Давидан","Йога","Лижаронӣ","Мавҷсаворӣ","Дзюдо","Гольф","Бадминтон","Регби","Кӯҳнавардӣ","Пайраҳаронии рӯи ях","Велоспорт","Тирандозӣ аз камон"]}},
+  {id:"transport",emoji:"🚗",color:"#0ea5e9",name:{ru:"Транспорт",en:"Transport",tj:"Нақлиёт"},words:{ru:["Автомобиль","Автобус","Поезд","Самолёт","Корабль","Велосипед","Мотоцикл","Вертолёт","Метро","Трамвай","Такси","Подводная лодка","Воздушный шар","Ракета","Скутер","Грузовик","Паром","Канатная дорога","Электросамокат","Сани"],en:["Car","Bus","Train","Airplane","Ship","Bicycle","Motorcycle","Helicopter","Subway","Tram","Taxi","Submarine","Hot air balloon","Rocket","Scooter","Truck","Ferry","Cable car","Electric scooter","Sled"],tj:["Мошин","Автобус","Қатора","Ҳавопаймо","Киштӣ","Велосипед","Мотоцикл","Чархболад","Метро","Трамвай","Такси","Зериобхока","Балони ҳавоӣ","Ракета","Скутер","Мошини боркаш","Паром","Роҳи ресмонӣ","Скутери барқӣ","Чана"]}},
+  {id:"space",emoji:"🚀",color:"#8b5cf6",name:{ru:"Космос",en:"Space",tj:"Кайҳон"},words:{ru:["Луна","Марс","Комета","Астероид","Галактика","Чёрная дыра","Спутник","Скафандр","Метеорит","Созвездие","Телескоп","Сатурн","Млечный путь","Невесомость","Ракета","Орбита","Солнце","Туманность","Астронавт","Затмение"],en:["Moon","Mars","Comet","Asteroid","Galaxy","Black hole","Satellite","Spacesuit","Meteorite","Constellation","Telescope","Saturn","Milky Way","Weightlessness","Rocket","Orbit","Sun","Nebula","Astronaut","Eclipse"],tj:["Моҳ","Миррих","Комета","Астероид","Каҳкашон","Сӯрохи сиёҳ","Моҳвора","Либоси кайҳонӣ","Метеорит","Бурҷ","Телескоп","Зуҳал","Роҳи каҳкашон","Бевазнӣ","Ракета","Мадор","Офтоб","Туманнокӣ","Астронавт","Хусуф"]}},
+  {id:"instruments",emoji:"🎸",color:"#ec4899",name:{ru:"Музыкальные инструменты",en:"Musical Instruments",tj:"Асбобҳои мусиқӣ"},words:{ru:["Гитара","Пианино","Скрипка","Барабаны","Флейта","Труба","Саксофон","Виолончель","Арфа","Аккордеон","Укулеле","Кларнет","Орган","Ксилофон","Волынка","Балалайка","Синтезатор","Тромбон","Банджо","Гонг"],en:["Guitar","Piano","Violin","Drums","Flute","Trumpet","Saxophone","Cello","Harp","Accordion","Ukulele","Clarinet","Organ","Xylophone","Bagpipes","Balalaika","Synthesizer","Trombone","Banjo","Gong"],tj:["Гитара","Пианино","Скрипка","Табл","Най","Карнай","Саксофон","Виолончель","Чанг","Аккордеон","Укулеле","Кларнет","Орган","Ксилофон","Волынка","Балалайка","Синтезатор","Тромбон","Банҷо","Гонг"]}},
+  {id:"countries",emoji:"🌍",color:"#14b8a6",name:{ru:"Страны и города",en:"Countries & Cities",tj:"Кишварҳо ва шаҳрҳо"},words:{ru:["Париж","Токио","Нью-Йорк","Рим","Каир","Москва","Лондон","Рио-де-Жанейро","Дубай","Сидней","Барселона","Стамбул","Пекин","Амстердам","Венеция","Прага","Марракеш","Сеул","Бангкок","Лиссабон"],en:["Paris","Tokyo","New York","Rome","Cairo","Moscow","London","Rio de Janeiro","Dubai","Sydney","Barcelona","Istanbul","Beijing","Amsterdam","Venice","Prague","Marrakesh","Seoul","Bangkok","Lisbon"],tj:["Париж","Токио","Ню-Йорк","Рим","Қоҳира","Маскав","Лондон","Рио-де-Жанейро","Дубай","Сидней","Барселона","Истамбул","Пекин","Амстердам","Венетсия","Прага","Марокаш","Сеул","Бангкок","Лиссабон"]}},
+  {id:"weather",emoji:"🌦️",color:"#38bdf8",name:{ru:"Погода и природные явления",en:"Weather & Nature",tj:"Обу ҳаво ва падидаҳои табиӣ"},words:{ru:["Дождь","Снег","Радуга","Гроза","Туман","Ураган","Град","Молния","Засуха","Наводнение","Торнадо","Иней","Роса","Землетрясение","Северное сияние","Метель","Цунами","Гром","Жара","Заморозки"],en:["Rain","Snow","Rainbow","Thunderstorm","Fog","Hurricane","Hail","Lightning","Drought","Flood","Tornado","Frost","Dew","Earthquake","Northern lights","Blizzard","Tsunami","Thunder","Heat","Cold snap"],tj:["Борон","Барф","Тирукамон","Тӯфон","Туман","Гирдбод","Жола","Барқ","Хушксолӣ","Обхезӣ","Торнадо","Шабнами яхкарда","Шабнам","Зилзила","Шафақи шимолӣ","Бӯрони барф","Сунами","Раъд","Гармои сахт","Яхбандӣ"]}},
+  {id:"school",emoji:"📚",color:"#f59e0b",name:{ru:"Школьные предметы",en:"School Subjects",tj:"Фанҳои мактабӣ"},words:{ru:["Математика","История","Физика","Химия","Биология","География","Литература","Информатика","Музыка","Рисование","Физкультура","Английский язык","Труд","Обществознание","Астрономия","Геометрия","Экономика","Черчение","Экология","Психология"],en:["Math","History","Physics","Chemistry","Biology","Geography","Literature","Computer science","Music","Art class","Physical education","English","Technology class","Social studies","Astronomy","Geometry","Economics","Drafting","Ecology","Psychology"],tj:["Математика","Таърих","Физика","Химия","Биология","Ҷуғрофия","Адабиёт","Информатика","Мусиқӣ","Расмкашӣ","Тарбияи ҷисмонӣ","Забони англисӣ","Меҳнат","Ҷомеашиносӣ","Астрономия","Геометрия","Иқтисод","Нақшакашӣ","Экология","Психология"]}},
+  {id:"appliances",emoji:"🔌",color:"#6366f1",name:{ru:"Бытовая техника",en:"Home Appliances",tj:"Техникаи рӯзгор"},words:{ru:["Холодильник","Стиральная машина","Микроволновка","Пылесос","Утюг","Тостер","Кофемашина","Фен","Блендер","Посудомоечная машина","Кондиционер","Мультиварка","Соковыжималка","Электрочайник","Обогреватель","Увлажнитель воздуха","Миксер","Швейная машина","Робот-пылесос","Вафельница"],en:["Refrigerator","Washing machine","Microwave","Vacuum cleaner","Iron","Toaster","Coffee maker","Hair dryer","Blender","Dishwasher","Air conditioner","Slow cooker","Juicer","Electric kettle","Heater","Humidifier","Mixer","Sewing machine","Robot vacuum","Waffle maker"],tj:["Яхдон","Мошини ҷомашӯӣ","Печи микромавҷ","Чангкашак","Дарзмол","Тостер","Мошини қаҳвапазӣ","Фен","Блендер","Мошини зарфшӯӣ","Кондитсионер","Мултиварка","Афшурагир","Чойники барқӣ","Гармкунак","Намнокунандаи ҳаво","Миксер","Мошини дӯзандагӣ","Роботи чангкашак","Вафелпаз"]}},
+  {id:"furniture",emoji:"🛋️",color:"#a855f7",name:{ru:"Мебель",en:"Furniture",tj:"Мебел"},words:{ru:["Диван","Кровать","Шкаф","Стол","Стул","Кресло","Комод","Полка","Табурет","Тумбочка","Зеркало","Книжный шкаф","Гардероб","Качели","Люстра","Вешалка","Пуфик","Сервант","Кушетка","Секретер"],en:["Sofa","Bed","Wardrobe","Table","Chair","Armchair","Chest of drawers","Shelf","Stool","Nightstand","Mirror","Bookcase","Closet","Swing","Chandelier","Coat rack","Pouf","Sideboard","Couch","Writing desk"],tj:["Диван","Кат","Ҷевон","Миз","Курсӣ","Кресло","Комод","Раф","Курсии кӯтоҳ","Тумбочка","Оина","Ҷевони китоб","Гардероб","Тобхӯрак","Люстра","Ҷевраки либос","Пуфик","Серванд","Кушетка","Секретер"]}},
+  {id:"clothes",emoji:"👗",color:"#f43f5e",name:{ru:"Одежда",en:"Clothes",tj:"Либос"},words:{ru:["Платье","Джинсы","Куртка","Свитер","Шапка","Шарф","Перчатки","Ботинки","Костюм","Юбка","Футболка","Пальто","Кроссовки","Пижама","Купальник","Галстук","Плащ","Шорты","Сандалии","Жилет"],en:["Dress","Jeans","Jacket","Sweater","Hat","Scarf","Gloves","Boots","Suit","Skirt","T-shirt","Coat","Sneakers","Pajamas","Swimsuit","Tie","Raincoat","Shorts","Sandals","Vest"],tj:["Курта","Ҷинс","Куртка","Свитер","Телпак","Шарф","Дастпӯшак","Мӯза","Костюм","Юбка","Футболка","Пальто","Кроссовка","Пижама","Либоси шиноварӣ","Галстук","Плаш","Шорт","Сандал","Жилет"]}},
+  {id:"holidays",emoji:"🎉",color:"#eab308",name:{ru:"Праздники",en:"Holidays",tj:"Ҷашнҳо"},words:{ru:["Новый год","День рождения","Свадьба","Хэллоуин","Пасха","8 марта","День Победы","Масленица","Выпускной","Юбилей","Карнавал","День святого Валентина","Рождество","День учителя","Первое сентября","Новоселье","День защитника Отечества","Крещение","День города","Медовый месяц"],en:["New Year","Birthday","Wedding","Halloween","Easter","Women's Day","Victory Day","Maslenitsa","Graduation","Anniversary","Carnival","Valentine's Day","Christmas","Teacher's Day","First Day of School","Housewarming","Defender of the Fatherland Day","Epiphany","City Day","Honeymoon"],tj:["Соли Нав","Рӯзи таваллуд","Тӯй","Хэллоуин","Пасха","Рӯзи 8-уми март","Рӯзи Ғалаба","Масленица","Хатми таҳсил","Солгард","Карнавал","Рӯзи ошиқон","Мавлуди Исо","Рӯзи муаллимон","Якуми сентябр","Ҷашни хонаи нав","Рӯзи ҳимоятгари Ватан","Крещение","Рӯзи шаҳр","Моҳи асал"]}},
+  {id:"colors",emoji:"🎨",color:"#06b6d4",name:{ru:"Цвета",en:"Colors",tj:"Рангҳо"},words:{ru:["Красный","Синий","Жёлтый","Зелёный","Фиолетовый","Оранжевый","Розовый","Бирюзовый","Коричневый","Чёрный","Белый","Серый","Бордовый","Золотой","Серебряный","Малиновый","Бирюза","Хаки","Лавандовый","Изумрудный"],en:["Red","Blue","Yellow","Green","Purple","Orange","Pink","Turquoise","Brown","Black","White","Gray","Maroon","Gold","Silver","Crimson","Teal","Khaki","Lavender","Emerald"],tj:["Сурх","Кабуд","Зард","Сабз","Бунафш","Норанҷӣ","Гулобӣ","Фирӯзаранг","Қаҳваранг","Сиёҳ","Сафед","Хокистарӣ","Лаълӣ","Тиллоӣ","Нуқрагӣ","Ало","Фирӯза","Хакӣ","Лавандарӣ","Зумуррадӣ"]}},
+  {id:"emotions",emoji:"😊",color:"#fb7185",name:{ru:"Эмоции",en:"Emotions",tj:"Эҳсосот"},words:{ru:["Радость","Грусть","Гнев","Страх","Удивление","Стыд","Гордость","Ревность","Скука","Восторг","Тревога","Смущение","Разочарование","Умиление","Отвращение","Ностальгия","Любопытство","Облегчение","Вина","Вдохновение"],en:["Joy","Sadness","Anger","Fear","Surprise","Shame","Pride","Jealousy","Boredom","Delight","Anxiety","Embarrassment","Disappointment","Tenderness","Disgust","Nostalgia","Curiosity","Relief","Guilt","Inspiration"],tj:["Шодӣ","Ғам","Хашм","Тарс","Тааҷҷуб","Шарм","Ифтихор","Рашк","Дилгирӣ","Хурсандии беохир","Изтироб","Хиҷолат","Ноумедӣ","Меҳрубонӣ","Нафрат","Ҳасрати гузашта","Кунҷковӣ","Сабукшавӣ","Гунаҳкорӣ","Илҳом"]}},
+  {id:"fruits",emoji:"🍎",color:"#65a30d",name:{ru:"Фрукты и овощи",en:"Fruits & Vegetables",tj:"Мева ва сабзавот"},words:{ru:["Яблоко","Банан","Апельсин","Виноград","Арбуз","Морковь","Картофель","Помидор","Огурец","Клубника","Ананас","Манго","Лимон","Свёкла","Капуста","Персик","Гранат","Тыква","Груша","Авокадо"],en:["Apple","Banana","Orange","Grapes","Watermelon","Carrot","Potato","Tomato","Cucumber","Strawberry","Pineapple","Mango","Lemon","Beetroot","Cabbage","Peach","Pomegranate","Pumpkin","Pear","Avocado"],tj:["Себ","Банан","Афлесун","Ангур","Тарбуз","Сабзӣ","Картошка","Помидор","Бодиринг","Тути фарангӣ","Ананас","Манго","Лимӯ","Лаблабу","Карам","Шафтолу","Анор","Каду","Нок","Авокадо"]}},
+  {id:"insects",emoji:"🐝",color:"#84cc16",name:{ru:"Насекомые",en:"Insects",tj:"Ҳашарот"},words:{ru:["Пчела","Бабочка","Муравей","Кузнечик","Божья коровка","Стрекоза","Жук","Комар","Муха","Оса","Паук","Гусеница","Сверчок","Богомол","Таракан","Мотылёк","Термит","Клоп","Шмель","Светлячок"],en:["Bee","Butterfly","Ant","Grasshopper","Ladybug","Dragonfly","Beetle","Mosquito","Fly","Wasp","Spider","Caterpillar","Cricket","Mantis","Cockroach","Moth","Termite","Bedbug","Bumblebee","Firefly"],tj:["Занбӯри асал","Шабпарак","Мӯрча","Малах","Каҷалак","Стрекоза","Гамбӯсак","Пашша","Магас","Занбӯри ёбоӣ","Тортанак","Кирм","Чирчирак","Модаркушак","Таракан","Парвонаи шабона","Термит","Клоп","Занбӯри калон","Кирми шабтоб"]}},
+  {id:"sea",emoji:"🐠",color:"#0891b2",name:{ru:"Рыбы и морские обитатели",en:"Sea Creatures",tj:"Мохиён ва мавҷудоти баҳрӣ"},words:{ru:["Осьминог","Медуза","Морской конёк","Краб","Дельфин","Кит","Акула","Скат","Морская звезда","Лобстер","Тунец","Морж","Тюлень","Устрица","Пиранья","Морской ёж","Кальмар","Черепаха","Угорь","Кораллы"],en:["Octopus","Jellyfish","Seahorse","Crab","Dolphin","Whale","Shark","Stingray","Starfish","Lobster","Tuna","Walrus","Seal","Oyster","Piranha","Sea urchin","Squid","Turtle","Eel","Coral"],tj:["Ҳаштпо","Медуза","Аспаки баҳрӣ","Харчанг","Делфин","Наҳанг","Акула","Скат","Ситораи баҳрӣ","Лобстер","Тунец","Морж","Мӯҳри баҳрӣ","Садафак","Пиранья","Хорпушти баҳрӣ","Калмар","Сангпушт","Мормоҳӣ","Марҷон"]}},
+  {id:"dinosaurs",emoji:"🦖",color:"#16a34a",name:{ru:"Динозавры",en:"Dinosaurs",tj:"Динозаврҳо"},words:{ru:["Тираннозавр","Трицератопс","Велоцираптор","Стегозавр","Бронтозавр","Птеродактиль","Диплодок","Анкилозавр","Спинозавр","Пахицефалозавр","Игуанодон","Аллозавр","Компсогнат","Мозазавр","Плезиозавр","Дилофозавр","Паразауролоф","Карнотавр","Археоптерикс","Гигантозавр"],en:["Tyrannosaurus","Triceratops","Velociraptor","Stegosaurus","Brontosaurus","Pterodactyl","Diplodocus","Ankylosaurus","Spinosaurus","Pachycephalosaurus","Iguanodon","Allosaurus","Compsognathus","Mosasaurus","Plesiosaurus","Dilophosaurus","Parasaurolophus","Carnotaurus","Archaeopteryx","Giganotosaurus"],tj:["Тираннозавр","Трицератопс","Велосираптор","Стегозавр","Бронтозавр","Птеродактил","Диплодок","Анкилозавр","Спинозавр","Пахисефалозавр","Игуанодон","Аллозавр","Компсогнат","Мозазавр","Плезиозавр","Дилофозавр","Паразауролоф","Карнотавр","Археоптерикс","Гигантозавр"]}},
+  {id:"myth",emoji:"🐉",color:"#7c3aed",name:{ru:"Сказочные существа",en:"Mythical Creatures",tj:"Мавҷудоти афсонавӣ"},words:{ru:["Дракон","Единорог","Русалка","Фея","Гном","Тролль","Оборотень","Вампир","Феникс","Кентавр","Эльф","Гоблин","Пегас","Циклоп","Сфинкс","Гидра","Йети","Баба-яга","Джинн","Кикимора"],en:["Dragon","Unicorn","Mermaid","Fairy","Gnome","Troll","Werewolf","Vampire","Phoenix","Centaur","Elf","Goblin","Pegasus","Cyclops","Sphinx","Hydra","Yeti","Baba Yaga","Genie","Kikimora"],tj:["Аждаҳо","Якшох","Пари обӣ","Пари","Гном","Тролл","Гургнамо","Вампир","Феникс","Кентавр","Элф","Гоблин","Пегас","Сиклоп","Сфинкс","Гидра","Йети","Баба-яга","Ҷин","Кикимора"]}},
+  {id:"tools",emoji:"🔧",color:"#78716c",name:{ru:"Инструменты",en:"Tools",tj:"Асбобҳо"},words:{ru:["Молоток","Отвёртка","Пила","Гаечный ключ","Дрель","Плоскогубцы","Рубанок","Стамеска","Уровень","Топор","Шуруповёрт","Напильник","Клещи","Ножовка","Кисть малярная","Рулетка","Степлер","Тиски","Лом","Паяльник"],en:["Hammer","Screwdriver","Saw","Wrench","Drill","Pliers","Hand plane","Chisel","Level","Axe","Power drill","File","Tongs","Hacksaw","Paintbrush","Tape measure","Stapler","Vise","Crowbar","Soldering iron"],tj:["Болға","Печгардон","Арра","Калиди гайка","Дрель","Анбурак","Рубанок","Стамеска","Сатҳсанҷ","Табар","Шуруповёрт","Сӯҳон","Анбур","Арраи дастӣ","Мӯйқалами рангмолӣ","Рулетка","Степлер","Тиски","Лом","Паяльник"]}},
+  {id:"construction",emoji:"🚜",color:"#ca8a04",name:{ru:"Строительная техника",en:"Construction Vehicles",tj:"Техникаи сохтмонӣ"},words:{ru:["Экскаватор","Бульдозер","Кран башенный","Самосвал","Бетономешалка","Каток дорожный","Погрузчик","Автовышка","Грейдер","Трактор","Асфальтоукладчик","Буровая установка","Землеройная машина","Сваебойная машина","Автокран","Скрепер","Мини-погрузчик","Трубоукладчик","Компрессор","Виброплита"],en:["Excavator","Bulldozer","Tower crane","Dump truck","Concrete mixer","Road roller","Loader","Aerial lift","Grader","Tractor","Asphalt paver","Drilling rig","Earthmover","Pile driver","Mobile crane","Scraper","Mini loader","Pipe layer","Compressor","Vibrating plate"],tj:["Экскаватор","Бульдозер","Крани бошӣ","Самосвал","Бетономешалка","Каток","Погрузчик","Автовышка","Грейдер","Трактор","Асфальтрезгар","Дастгоҳи бурғӣ","Мошини заминков","Мошини сутункӯб","Автокран","Скрепер","Мини-погрузчик","Мошини қубургузор","Компрессор","Виброплита"]}},
+  {id:"winter",emoji:"⛄",color:"#38bdf8",name:{ru:"Зимние развлечения",en:"Winter Fun",tj:"Фароғати зимистона"},words:{ru:["Лыжи","Сноуборд","Коньки","Санки","Снеговик","Снежки","Каток","Хоккей на льду","Ледянка","Горка ледяная","Зимняя рыбалка","Сноутюбинг","Керлинг","Прогулка в снегопад","Ёлка наряженная","Морж (купание)","Ледяная скульптура","Собачья упряжка","Биатлон","Зимний поход"],en:["Skiing","Snowboarding","Ice skating","Sledding","Snowman","Snowball fight","Ice rink","Ice hockey","Sled ride","Ice slide","Winter fishing","Snow tubing","Curling","Walk in the snowfall","Decorated Christmas tree","Winter swimming","Ice sculpture","Dog sled","Biathlon","Winter hike"],tj:["Лижаронӣ","Сноуборд","Пойафзоли яхгард","Чана","Одами барфӣ","Барфбозӣ","Катаки ях","Хоккейи рӯи ях","Ледянка","Теппаи яхин","Моҳигирии зимистона","Сноутюбинг","Керлинг","Сайругашт дар барфбор","Дарахти солинавии ороишдодашуда","Шиноварии зимистона","Ҳайкали яхин","Аробаи сагкашон","Биатлон","Сайругашти зимистона"]}},
+  {id:"summer",emoji:"🏖️",color:"#fbbf24",name:{ru:"Летние развлечения",en:"Summer Fun",tj:"Фароғати тобистона"},words:{ru:["Пляж","Купание в море","Пикник","Велопрогулка","Роликовые коньки","Батут","Аквапарк","Поход в горы","Рыбалка","Мороженое","Фестиваль","Барбекю","Кемпинг","Серфинг","Дайвинг","Волейбол на пляже","Костёр","Зорбинг","Парасейлинг","Ночёвка в палатке"],en:["Beach","Sea swimming","Picnic","Bike ride","Roller skating","Trampoline","Water park","Mountain hike","Fishing","Ice cream","Festival","Barbecue","Camping","Surfing","Diving","Beach volleyball","Campfire","Zorbing","Parasailing","Tent camping overnight"],tj:["Соҳил","Шиноварӣ дар баҳр","Пикник","Сайругашти дучарха","Пойафзоли ғилдиракдор","Батут","Аквапарк","Сайругашт ба кӯҳ","Моҳигирӣ","Яхмос","Фестивал","Барбекю","Кемпинг","Мавҷсаворӣ","Ғаввосӣ","Волейбол дар соҳил","Гулхан","Зорбинг","Парасейлинг","Шабгузаронӣ дар хайма"]}},
+  {id:"drinks",emoji:"🥤",color:"#d946ef",name:{ru:"Напитки",en:"Drinks",tj:"Нӯшокиҳо"},words:{ru:["Кофе","Чай","Сок","Лимонад","Квас","Какао","Морс","Компот","Минеральная вода","Молочный коктейль","Энергетик","Кокосовая вода","Смузи","Глинтвейн","Айран","Кисель","Матча","Газировка","Холодный чай","Молоко"],en:["Coffee","Tea","Juice","Lemonade","Kvass","Cocoa","Fruit drink","Compote","Mineral water","Milkshake","Energy drink","Coconut water","Smoothie","Mulled wine","Ayran","Kissel","Matcha","Soda","Iced tea","Milk"],tj:["Қаҳва","Чой","Афшура","Лимонад","Квас","Какао","Шарбат","Компот","Оби минералӣ","Коктейли ширӣ","Нӯшобаи энергетикӣ","Оби кокос","Смузи","Шароби гарм","Айрон","Кисел","Матча","Газировка","Чойи хунук","Шир"]}},
+  {id:"desserts",emoji:"🍰",color:"#f472b6",name:{ru:"Десерты",en:"Desserts",tj:"Ширинӣ"},words:{ru:["Торт","Мороженое","Пирожное","Чизкейк","Тирамису","Эклер","Пончик","Маффин","Штрудель","Безе","Панкейк","Печенье","Зефир","Вафли","Конфеты","Крем-брюле","Пахлава","Мороженое-рожок","Пудинг","Медовик"],en:["Cake","Ice cream","Pastry","Cheesecake","Tiramisu","Eclair","Donut","Muffin","Strudel","Meringue","Pancake","Cookie","Marshmallow","Waffles","Candy","Creme brulee","Baklava","Ice cream cone","Pudding","Honey cake"],tj:["Торт","Яхмос","Ширинӣ","Чизкейк","Тирамису","Эклер","Пончик","Маффин","Штрудель","Безе","Панкейк","Кулча","Зефир","Вафли","Конфет","Крем-брюле","Пахлава","Мороженое дар вафли","Пудинг","Кулчаи асал"]}},
+  {id:"bodytypes",emoji:"🚙",color:"#334155",name:{ru:"Виды автомобильных кузовов",en:"Car Body Types",tj:"Намудҳои кузови мошин"},words:{ru:["Седан","Внедорожник","Хэтчбек","Универсал","Кабриолет","Купе","Минивэн","Пикап","Кроссовер","Лимузин","Фургон","Родстер","Гоночный болид","Багги","Вездеход","Микроавтобус","Тарга","Лифтбек","Спорткар","Ретроавтомобиль"],en:["Sedan","SUV","Hatchback","Station wagon","Convertible","Coupe","Minivan","Pickup truck","Crossover","Limousine","Van","Roadster","Race car","Buggy","All-terrain vehicle","Minibus","Targa","Liftback","Sports car","Vintage car"],tj:["Седан","Внедорожник","Хетчбек","Универсал","Кабриолет","Купе","Минивэн","Пикап","Кроссовер","Лимузин","Фургон","Родстер","Мошини мусобиқавӣ","Багги","Вездеход","Микроавтобус","Тарга","Лифтбек","Мошини варзишӣ","Мошини кӯҳна"]}},
+  {id:"hobbies",emoji:"🎯",color:"#10b981",name:{ru:"Хобби",en:"Hobbies",tj:"Машғулиятҳо"},words:{ru:["Рыбалка","Вязание","Фотография","Шахматы","Рисование","Коллекционирование марок","Садоводство","Кулинария","Танцы","Пазлы","Оригами","Скрапбукинг","Настольные игры","Караоке","Вышивка","Бег","Йога","Моделирование","Каллиграфия","Пивоварение"],en:["Fishing","Knitting","Photography","Chess","Drawing","Stamp collecting","Gardening","Cooking","Dancing","Puzzles","Origami","Scrapbooking","Board games","Karaoke","Embroidery","Running","Yoga","Modeling","Calligraphy","Brewing"],tj:["Моҳигирӣ","Бофандагӣ","Аксбардорӣ","Шоҳмот","Расмкашӣ","Ҷамъоварии маркаҳо","Боғдорӣ","Ошпазӣ","Рақс","Пазл","Оригами","Скрапбукинг","Бозиҳои рӯимизӣ","Караоке","Гулдӯзӣ","Давидан","Йога","Моделсозӣ","Хушнависӣ","Пивопазӣ"]}},
+  {id:"genres",emoji:"🎬",color:"#e11d48",name:{ru:"Жанры кино и сериалов",en:"Movie & TV Genres",tj:"Жанрҳои филм ва сериал"},words:{ru:["Комедия","Драма","Триллер","Ужасы","Боевик","Детектив","Мелодрама","Фантастика","Фэнтези","Мультфильм","Документальный фильм","Мюзикл","Приключения","Военный фильм","Криминал","Исторический фильм","Вестерн","Антиутопия","Биография","Семейный фильм"],en:["Comedy","Drama","Thriller","Horror","Action","Detective","Melodrama","Sci-fi","Fantasy","Cartoon","Documentary","Musical","Adventure","War film","Crime","Historical film","Western","Dystopia","Biography","Family film"],tj:["Комедия","Драма","Триллер","Даҳшатнок","Боевик","Детектив","Мелодрама","Фантастика","Фэнтези","Мултфилм","Филми ҳуҷҷатӣ","Мюзикл","Саргузашт","Филми ҷангӣ","Ҷинояткорӣ","Филми таърихӣ","Вестерн","Антиутопия","Тарҷумаи ҳол","Филми оилавӣ"]}},
+  {id:"islam",emoji:"☪️",color:"#0d9488",name:{ru:"Ислам",en:"Islam",tj:"Ислом"},words:{ru:["Адам","Идрис","Нух","Худ","Салих","Ибрахим","Лут","Исмаил","Исхак","Якуб","Юсуф","Айюб","Шуайб","Муса","Харун","Заль-Кифль","Дауд","Сулейман","Ильяс","Альяса","Юнус","Закария","Яхья","Иса","Мухаммад","Намаз","Тахарат","Альхамдулиллах","Бисмиллах","Иншаллах","Субханаллах","Аллаху Акбар","Ля иляха илля Ллах","Рамадан","Ураза","Ифтар","Сухур","Закят","Хадж","Умра","Кааба","Кыбла","Коран","Хадис","Сунна","Мечеть","Имам","Азан","Иман","Джаннат"],en:["Adam","Idris","Nuh","Hud","Salih","Ibrahim","Lut","Ismail","Ishaq","Yaqub","Yusuf","Ayyub","Shuayb","Musa","Harun","Dhul-Kifl","Dawud","Sulayman","Ilyas","Al-Yasa","Yunus","Zakariya","Yahya","Isa","Muhammad","Prayer (Salah)","Purification (Taharah)","Alhamdulillah","Bismillah","InshaAllah","SubhanAllah","Allahu Akbar","La ilaha illallah","Ramadan","Fasting (Sawm)","Iftar","Suhoor","Zakat","Hajj","Umrah","Kaaba","Qibla","Quran","Hadith","Sunnah","Mosque","Imam","Adhan","Iman","Jannah"],tj:["Одам","Идрис","Нӯҳ","Ҳуд","Солеҳ","Иброҳим","Лут","Исмоил","Исҳоқ","Яъқуб","Юсуф","Айюб","Шуайб","Мӯсо","Ҳорун","Зулкифл","Довуд","Сулаймон","Ильёс","Алясаъ","Юнус","Закариё","Яҳё","Исо","Муҳаммад","Намоз","Тоҳарат","Алҳамдулиллаҳ","Бисмиллаҳ","Иншооллоҳ","Субҳоноллоҳ","Аллоҳу акбар","Ло илоҳа иллаллоҳ","Рамазон","Рӯза","Ифтор","Саҳарӣ","Закот","Ҳаҷ","Умра","Каъба","Қибла","Қуръон","Ҳадис","Суннат","Масҷид","Имом","Азон","Имон","Ҷаннат"]}},
+  {id:"hobgokh",emoji:"👥",color:"#f59e0b",name:{ru:"Хобгох",en:"Hobgokh",tj:"Ҳобгоҳ"},words:{ru:["Аюб","Ахмад","Анас","Зайнулло","Мустафо","Амин","акаи Аслиддин","акаи Умед","акаи Мухаммадюсуф","акаи Самандар"],en:["Ayub","Ahmad","Anas","Zaynullo","Mustafo","Amin","akai Asliddin","akai Umed","akai Muhammadyusuf","akai Samandar"],tj:["Аюб","Ахмад","Анас","Зайнулло","Мустафо","Амин","акаи Аслиддин","акаи Умед","акаи Мухаммадюсуф","акаи Самандар"]}}
+];
+function themeName(theme, lang) { return (theme.name && theme.name[lang]) || theme.name.ru; }
+function themeWords(theme, lang) { return (theme.words && theme.words[lang]) || theme.words.ru; }
+
+/* ============================== I18N ============================== */
+const STRINGS = {
+  ru: {
+    appName: "ШПИОН", tagline: "Слово знают все. Кроме одного.",
+    play: "Играть", players: "Игроки", themes: "Темы", settings: "Настройки",
+    playersCount: "Игроков", themesCount: "Активных тем",
+    addPlayerPlaceholder: "Имя игрока", quickAdd: "Быстрое добавление",
+    minPlayers: "⚠️ Нужно минимум 3 игрока", maxPlayers: "Максимум — 20 игроков",
+    duplicateName: "Такое имя уже есть", chooseAvatar: "Выбери аватар",
+    selectAll: "Выбрать все", clearAll: "Снять всё", selected: "Выбрано",
+    of: "из", needTheme: "Выбери хотя бы одну тему", preview: "Превью слов",
+    spiesCount: "Количество шпионов", roundTime: "Время на раунд", minutes: "мин",
+    spyDifficulty: "Что видит шпион", diffNone: "Ничего", diffTheme: "Только тему",
+    diffHints: "Тему и 3 слова-подсказки", allowSpyGuess: "Кнопка «Я — шпион»",
+    sound: "Звук", vibration: "Вибрация", darkTheme: "Тёмная тема", language: "Язык",
+    back: "Назад", ready: "ГОТОВЫ?", roundTitle: "Раунд шпиона",
+    startDeal: "Начать раздачу слов →", playersWord: "игроков", spiesWord: "шпионов",
+    randomWordFrom: "Секретное слово будет выбрано из", activeThemes: "активных тем",
+    passDevice: "Передайте устройство игроку", holdToReveal: "Нажми и удерживай, чтобы увидеть своё слово",
+    holdCard: "Нажми и удерживай", youAreSpy: "Ты — ШПИОН", spyNoInfo: "Постарайся понять тему по разговору.",
+    spyThemeOnly: "Тема раунда:", spyHints: "Слова-подсказки из темы:",
+    theme: "Тема", doneNext: "Готово → Передать дальше", startGame: "Перейти к игре →",
+    playerOf: "Игрок", ofWord: "из", pause: "Пауза", resume: "Продолжить",
+    exile: "Изгнать", iAmSpy: "Я — шпион", whoToExile: "Кого изгоняем?",
+    exileSelected: "Изгнать выбранного", exiled: "изгнан", notSpyBanner: "не шпион! Игра продолжается",
+    guessTitle: "Выбери секретное слово", guessSubtitle: "Тема:",
+    confirmGuess: "Ты уверен, что это слово —", noWayBack: "Обратной дороги нет.",
+    yes: "Да", cancel: "Отмена", spyWon: "ШПИОН ПОБЕДИЛ", playersWon: "ИГРОКИ ПОБЕДИЛИ",
+    spyGuessedRight: "Шпион угадал слово и победил!", exiledSpyWin: "Игроки изгнали шпиона и победили!",
+    spyGuessedWrong: "Шпион попытался угадать слово, но ошибся — победили игроки!",
+    secretWordWas: "Секретное слово было:", spyWas: "Шпион", spyGuessed: "Шпион выбрал",
+    playAgain: "Играть снова", newGame: "Новая игра", wins: "побед",
+    edit: "Изменить", delete: "Удалить", cancelBtn: "Отмена", confirmDelete: "Удалить?",
+    close: "Закрыть", notEnough: "Недостаточно игроков или тем для начала игры",
+    leaveRoundWarning: "Вы уверены, что хотите выйти? Прогресс текущего раунда будет потерян.",
+    leaveRound: "Выйти из раунда",
+  },
+  en: {
+    appName: "SPY", tagline: "Everyone knows the word. Except one.",
+    play: "Play", players: "Players", themes: "Topics", settings: "Settings",
+    playersCount: "Players", themesCount: "Active topics",
+    addPlayerPlaceholder: "Player name", quickAdd: "Quick add",
+    minPlayers: "⚠️ You need at least 3 players", maxPlayers: "Maximum is 20 players",
+    duplicateName: "That name is taken", chooseAvatar: "Choose an avatar",
+    selectAll: "Select all", clearAll: "Clear all", selected: "Selected",
+    of: "of", needTheme: "Pick at least one topic", preview: "Preview words",
+    spiesCount: "Number of spies", roundTime: "Round time", minutes: "min",
+    spyDifficulty: "What the spy sees", diffNone: "Nothing", diffTheme: "Topic only",
+    diffHints: "Topic + 3 hint words", allowSpyGuess: "\u201cI'm the spy\u201d button",
+    sound: "Sound", vibration: "Vibration", darkTheme: "Dark theme", language: "Language",
+    back: "Back", ready: "READY?", roundTitle: "Spy round",
+    startDeal: "Deal the words →", playersWord: "players", spiesWord: "spies",
+    randomWordFrom: "The secret word will be picked from", activeThemes: "active topics",
+    passDevice: "Pass the device to", holdToReveal: "Press and hold to see your word",
+    holdCard: "Press and hold", youAreSpy: "You are the SPY", spyNoInfo: "Try to figure out the topic from the talk.",
+    spyThemeOnly: "Round topic:", spyHints: "Hint words from the topic:",
+    theme: "Topic", doneNext: "Done → Pass along", startGame: "Start the round →",
+    playerOf: "Player", ofWord: "of", pause: "Pause", resume: "Resume",
+    exile: "Vote out", iAmSpy: "I'm the spy", whoToExile: "Who do we vote out?",
+    exileSelected: "Vote out selected", exiled: "voted out", notSpyBanner: "is not the spy! Game continues",
+    guessTitle: "Pick the secret word", guessSubtitle: "Topic:",
+    confirmGuess: "Are you sure the word is", noWayBack: "There's no turning back.",
+    yes: "Yes", cancel: "Cancel", spyWon: "THE SPY WON", playersWon: "PLAYERS WON",
+    spyGuessedRight: "The spy guessed the word and won!", exiledSpyWin: "Players voted out the spy and won!",
+    spyGuessedWrong: "The spy tried to guess but got it wrong — players won!",
+    secretWordWas: "The secret word was:", spyWas: "Spy", spyGuessed: "Spy picked",
+    playAgain: "Play again", newGame: "New game", wins: "wins",
+    edit: "Edit", delete: "Delete", cancelBtn: "Cancel", confirmDelete: "Delete?",
+    close: "Close", notEnough: "Not enough players or topics to start",
+    leaveRoundWarning: "Are you sure you want to leave? Progress in this round will be lost.",
+    leaveRound: "Leave round",
+  },
+  tj: {
+    appName: "ҶОСУС", tagline: "Ҳама калимаро медонанд. Ба ғайр аз як нафар.",
+    play: "Бозӣ кардан", players: "Бозингарон", themes: "Мавзӯъҳо", settings: "Танзимот",
+    playersCount: "Бозингарон", themesCount: "Мавзӯъҳои фаъол",
+    addPlayerPlaceholder: "Номи бозингар", quickAdd: "Иловаи зуд",
+    minPlayers: "⚠️ Ҳадди ақал 3 бозингар лозим аст", maxPlayers: "Ҳадди аксар — 20 бозингар",
+    duplicateName: "Чунин ном аллакай ҳаст", chooseAvatar: "Аватарро интихоб кунед",
+    selectAll: "Ҳамаро интихоб кардан", clearAll: "Ҳамаро тоза кардан", selected: "Интихобшуда",
+    of: "аз", needTheme: "Ҳадди ақал як мавзӯъро интихоб кунед", preview: "Пешнамоиши калимаҳо",
+    spiesCount: "Шумораи ҷосусон", roundTime: "Вақти давра", minutes: "дақ",
+    spyDifficulty: "Ҷосус чиро мебинад", diffNone: "Ҳеҷ чиз", diffTheme: "Танҳо мавзӯъ",
+    diffHints: "Мавзӯъ ва 3 калимаи ишоракунанда", allowSpyGuess: "Тугмаи «Ман — ҷосусам»",
+    sound: "Садо", vibration: "Ларзиш", darkTheme: "Мавзӯи торик", language: "Забон",
+    back: "Бозгашт", ready: "ОМОДА?", roundTitle: "Давраи ҷосус",
+    startDeal: "Тақсими калимаҳоро сар кунед →", playersWord: "бозингар", spiesWord: "ҷосус",
+    randomWordFrom: "Калимаи махфӣ аз", activeThemes: "мавзӯи фаъол интихоб мешавад",
+    passDevice: "Дастгоҳро ба бозингар диҳед", holdToReveal: "Барои дидани калимаи худ пахш карда нигоҳ доред",
+    holdCard: "Пахш карда нигоҳ доред", youAreSpy: "Шумо — ҶОСУС ҳастед", spyNoInfo: "Кӯшиш кунед мавзӯъро аз сӯҳбат бифаҳмед.",
+    spyThemeOnly: "Мавзӯи давра:", spyHints: "Калимаҳои ишоракунанда аз мавзӯъ:",
+    theme: "Мавзӯъ", doneNext: "Тайёр → Ба навбати дигар диҳед", startGame: "Гузариш ба бозӣ →",
+    playerOf: "Бозингар", ofWord: "аз", pause: "Таваққуф", resume: "Идома додан",
+    exile: "Хориҷ кардан", iAmSpy: "Ман — ҷосусам", whoToExile: "Киро хориҷ мекунем?",
+    exileSelected: "Интихобшударо хориҷ кардан", exiled: "хориҷ шуд", notSpyBanner: "ҷосус нест! Бозӣ идома дорад",
+    guessTitle: "Калимаи махфиро интихоб кунед", guessSubtitle: "Мавзӯъ:",
+    confirmGuess: "Шумо мутмаин ҳастед, ки калима ин аст —", noWayBack: "Роҳи бозгашт нест.",
+    yes: "Ҳа", cancel: "Бекор кардан", spyWon: "ҶОСУС ҒОЛИБ ШУД", playersWon: "БОЗИНГАРОН ҒОЛИБ ШУДАНД",
+    spyGuessedRight: "Ҷосус калимаро ёфт ва ғолиб омад!", exiledSpyWin: "Бозингарон ҷосусро хориҷ карданд ва ғолиб омаданд!",
+    spyGuessedWrong: "Ҷосус кӯшиши ёфтани калимаро кард, аммо хато кард — бозингарон ғолиб омаданд!",
+    secretWordWas: "Калимаи махфӣ ин буд:", spyWas: "Ҷосус", spyGuessed: "Ҷосус интихоб кард",
+    playAgain: "Аз нав бозӣ кардан", newGame: "Бозии нав", wins: "ғалаба",
+    edit: "Тағйир додан", delete: "Нест кардан", cancelBtn: "Бекор кардан", confirmDelete: "Нест карда шавад?",
+    close: "Пӯшидан", notEnough: "Барои сар кардани бозӣ бозингарон ё мавзӯъҳо кофӣ нестанд",
+    leaveRoundWarning: "Шумо мутмаин ҳастед, ки мехоҳед бароед? Пешрафти давраи ҷорӣ гум мешавад.",
+    leaveRound: "Баромадан аз давра",
+  }
+};
+
+const EMOJIS = ["😀","😎","🤠","🥸","🧐","🤓","😈","👽","🤖","🥷","🥳","🤩","😇","🙃","😜","🤪","🥶","🤯","🧑‍🚀","🧙",
+  "🐱","🐶","🦊","🐼","🦁","🐸","🐵","🦄","🐲","🐧","🦖","🐯","🦋","🐨","🐰","🐺","🦉","🐙","🦕","🐳",
+  "🍕","🍔","🍩","🍪","🍉","🥑","🥚","🍿","🍭","🍦",
+  "🎮","🎸","🚀","⚽","🎯","🎩","🕵️","🔍","💣","🎭","🌵","⭐","🍀","👻","🎃","🎲","🧩","🎨","🎧","🏆"];
 
 /* ============================== UTILS ============================== */
 function colorFor(name) {
@@ -263,7 +412,7 @@ function Toggle({ value, onChange, label }) {
   );
 }
 
-/* Модалка без анимаций */
+/* Модалка без анимаций (устраняет лаги на телефоне) */
 function Modal({ open, onClose, title, children, wide }) {
   useEffect(() => {
     if (!open) return;
@@ -329,7 +478,7 @@ function ThemePreviewModal({ open, onClose, theme, lang }) {
   );
 }
 
-/* Конфетти на CSS (лёгкое, только на десктопе) */
+/* Конфетти на CSS-анимации (лёгкое, включено только на широких экранах) */
 function Confetti({ variant = "players" }) {
   const pieces = useMemo(() => Array.from({ length: 24 }, (_, i) => ({
     id: i, x: Math.random() * 100, delay: Math.random() * 0.6,
@@ -651,10 +800,7 @@ function Reveal() {
   useEffect(() => { setHeld(false); setOpened(false); }, [round.revealIndex]);
 
   const press = (v) => {
-    setHeld((prev) => {
-      if (prev === v) return prev;
-      return v;
-    });
+    setHeld(v);
     if (v) {
       setOpened(true);
       if (settings.sound) beep(520, 0.05, "triangle");
@@ -947,7 +1093,6 @@ function StyleSheet() {
   font-family:'Inter',system-ui,sans-serif; color:var(--ink);
   padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);
   background:linear-gradient(160deg,var(--bg1),var(--bg2) 55%,var(--bg3));
-  background-attachment:scroll;
 }
 .sw-app[data-spy-theme="light"] {
   --bg1:#eef2ff; --bg2:#e0e7ff; --bg3:#f5f3ff;
@@ -955,7 +1100,6 @@ function StyleSheet() {
   --glass:rgba(255,255,255,0.55); --glass-border:rgba(120,110,180,0.18);
 }
 
-/* Статичный фон-город, без анимаций */
 .sw-ambient { position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
 .sw-skyline {
   position:absolute; left:0; right:0; bottom:0; width:100%;
@@ -976,14 +1120,12 @@ function StyleSheet() {
 h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-muted { color:var(--ink-dim); font-size:0.92rem; line-height:1.5; margin:0; }
 
-/* Splash */
 .sw-splash { align-items:center; justify-content:center; text-align:center; }
 .sw-splash-logo .sw-logo-mark { width:clamp(120px,32vw,180px); height:clamp(120px,32vw,180px); margin:0 auto; }
 .sw-logo-svg { width:100%; height:100%; display:block; }
 .sw-splash-logo h1 { font-size:clamp(1.8rem,6vw,2.4rem); letter-spacing:0.06em; margin-top:6px; }
 .sw-splash-logo p { color:var(--ink-dim); margin-top:6px; }
 
-/* Home */
 .sw-home { justify-content:center; }
 .sw-home-layout { display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; }
 .sw-emblem { position:relative; width:min(28vw,140px); height:min(28vw,140px); border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(167,139,250,0.18); margin-bottom:6px; padding:6px; }
@@ -996,7 +1138,6 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-badge { background:rgba(255,255,255,0.18); border-radius:999px; padding:1px 9px; font-size:0.8rem; margin-left:6px; }
 .sw-home-stats { display:flex; gap:16px; margin-top:14px; color:var(--ink-dim); font-size:0.85rem; }
 
-/* Buttons (без теней и blur — легче для GPU) */
 .sw-btn {
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
   padding:14px 20px; border-radius:16px; border:1px solid var(--glass-border);
@@ -1010,19 +1151,16 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-spy-cta { background:linear-gradient(135deg,#7c3aed,#c026d3); border:none; color:#fff; }
 .sw-icon-btn { width:44px; height:44px; border-radius:12px; border:none; background:var(--glass); color:var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; touch-action:manipulation; }
 
-/* Header */
 .sw-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
 .sw-corner-back { position:absolute; top:16px; left:16px; z-index:10; }
 .sw-header h1 { font-size:1.2rem; }
 
-/* Toggle */
 .sw-toggle { display:inline-flex; align-items:center; gap:8px; border:none; background:rgba(255,255,255,0.12); border-radius:999px; width:52px; height:30px; padding:3px; cursor:pointer; position:relative; }
 .sw-toggle-knob { width:24px; height:24px; border-radius:50%; background:#fff; }
 .sw-toggle.on { background:linear-gradient(135deg,var(--accent-violet),var(--accent-pink)); }
 .sw-toggle.on .sw-toggle-knob { transform:translateX(22px); }
 .sw-toggle em { font-style:normal; font-size:0.85rem; margin-left:4px; white-space:nowrap; }
 
-/* Modal */
 .sw-backdrop { position:fixed; inset:0; background:rgba(10,8,24,0.7); display:flex; align-items:flex-end; justify-content:center; z-index:100; }
 .sw-modal { width:100%; max-width:100%; background:var(--bg3); border:1px solid var(--glass-border); border-radius:24px 24px 0 0; padding:18px 18px 26px; max-height:82vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 .sw-modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
@@ -1107,7 +1245,6 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 .sw-reveal-player { display:flex; align-items:center; gap:10px; font-size:1.4rem; }
 .sw-reveal-player span { font-size:2rem; }
 
-/* ===== КАРТА: без transition, без 3D, мгновенное переключение ===== */
 .sw-secret-card {
   width:100%; max-width:340px; aspect-ratio:3/4;
   cursor:pointer; position:relative;
@@ -1122,15 +1259,9 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
   border:1px solid var(--glass-border);
   pointer-events:none;
 }
-.sw-card-front {
-  background:linear-gradient(160deg,#4a3b86,#1f5a63);
-  font-size:2.4rem;
-}
+.sw-card-front { background:linear-gradient(160deg,#4a3b86,#1f5a63); font-size:2.4rem; }
 .sw-card-front b { font-size:1rem; }
-.sw-card-back {
-  background:linear-gradient(160deg,#1e143c,#2d1e50);
-  display:none;
-}
+.sw-card-back { background:linear-gradient(160deg,#1e143c,#2d1e50); display:none; }
 .sw-secret-card.spy .sw-card-back { background:linear-gradient(160deg,#500f32,#3c145a); }
 .sw-secret-card.open .sw-card-front { display:none; }
 .sw-secret-card.open .sw-card-back { display:flex; }
@@ -1142,7 +1273,6 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 .sw-hints-row { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
 .sw-hints-row span { background:rgba(255,255,255,0.12); padding:4px 10px; border-radius:999px; font-size:0.8rem; color:#fff; }
 
-/* Таймер: без transition — обновление раз в секунду без плавности = без лагов */
 .sw-timer-ring { position:relative; width:min(70vw,240px); aspect-ratio:1; }
 .sw-timer-ring svg { width:100%; height:100%; transform:rotate(-90deg); }
 .sw-track { fill:none; stroke:rgba(255,255,255,0.1); stroke-width:12; }
@@ -1180,7 +1310,6 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 .sw-result-card > div small { margin-left:auto; color:var(--ink-dim); }
 .sw-result-exiled { opacity:0.55; }
 
-/* Конфетти: CSS, только на широких экранах; на телефоне скрыто */
 .sw-confetti { position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:5; display:none; }
 .sw-confetti-piece { position:absolute; top:-5%; border-radius:2px; animation-name:sw-fall; animation-timing-function:ease-in; animation-fill-mode:forwards; }
 @keyframes sw-fall { to { top:105%; transform:rotate(var(--rot)); } }
@@ -1188,7 +1317,6 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
   .sw-confetti { display:block; }
 }
 
-/* ============ TABLET / LANDSCAPE ============ */
 @media (min-width:768px) {
   .sw-screen { padding:32px 40px 48px; max-width:min(90vw,760px); }
   .sw-player-list { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
@@ -1219,7 +1347,6 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
   );
 }
 
-/* Статичный город: без анимаций, отрисовывается один раз */
 const CitySkyline = React.memo(function CitySkyline() {
   return (
     <div className="sw-skyline" aria-hidden="true">
