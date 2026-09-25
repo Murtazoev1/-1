@@ -80,6 +80,12 @@ const STRINGS = {
     close: "Закрыть", notEnough: "Недостаточно игроков или тем для начала игры",
     leaveRoundWarning: "Вы уверены, что хотите выйти? Прогресс текущего раунда будет потерян.",
     leaveRound: "Выйти из раунда",
+    speakerTitle: "Начинает говорить", speakerHint: "Этот игрок точно не шпион — пусть первым расскажет про слово.",
+    speakerGo: "Начать обсуждение →",
+    whoIsSpy: "Кто из вас шпион?", whoIsSpySubtitle: "Выбери игрока, которого подозреваешь",
+    confirmSpyPick: "Ты уверен, что это", areYouSpy: "— шпион?",
+    notTheSpy: "не шпион!", notTheSpyContinue: "Игра продолжается.",
+    youAreTheSpyReveal: "Да, это шпион! Выбери секретное слово:",
   },
   en: {
     appName: "SPY", tagline: "Everyone knows the word. Except one.",
@@ -115,6 +121,12 @@ const STRINGS = {
     close: "Close", notEnough: "Not enough players or topics to start",
     leaveRoundWarning: "Are you sure you want to leave? Progress in this round will be lost.",
     leaveRound: "Leave round",
+    speakerTitle: "Starts speaking", speakerHint: "This player is definitely not the spy — let them describe the word first.",
+    speakerGo: "Start the discussion →",
+    whoIsSpy: "Which of you is the spy?", whoIsSpySubtitle: "Pick the player you suspect",
+    confirmSpyPick: "Are you sure that", areYouSpy: "is the spy?",
+    notTheSpy: "is not the spy!", notTheSpyContinue: "The game continues.",
+    youAreTheSpyReveal: "Yes, that's the spy! Pick the secret word:",
   },
   tj: {
     appName: "ҶОСУС", tagline: "Ҳама калимаро медонанд. Ба ғайр аз як нафар.",
@@ -150,6 +162,12 @@ const STRINGS = {
     close: "Пӯшидан", notEnough: "Барои сар кардани бозӣ бозингарон ё мавзӯъҳо кофӣ нестанд",
     leaveRoundWarning: "Шумо мутмаин ҳастед, ки мехоҳед бароед? Пешрафти давраи ҷорӣ гум мешавад.",
     leaveRound: "Баромадан аз давра",
+    speakerTitle: "Аввал сухан мегӯяд", speakerHint: "Ин бозингар қатъиян ҷосус нест — бигзор аввал дар бораи калима нақл кунад.",
+    speakerGo: "Сӯҳбатро сар кунед →",
+    whoIsSpy: "Кадоми шумо ҷосус аст?", whoIsSpySubtitle: "Бозингареро, ки гумон мекунед, интихоб кунед",
+    confirmSpyPick: "Шумо мутмаин ҳастед, ки", areYouSpy: "ҷосус аст?",
+    notTheSpy: "ҷосус нест!", notTheSpyContinue: "Бозӣ идома дорад.",
+    youAreTheSpyReveal: "Ҳа, ин ҷосус аст! Калимаи махфиро интихоб кунед:",
   }
 };
 
@@ -212,6 +230,7 @@ const initialState = {
   settings: defaultSettings,
   round: null,
   wins: {},
+  lastSpyIds: [],
   loaded: false,
 };
 
@@ -252,16 +271,38 @@ function reducer(state, action) {
       const wordCount = theme.words.ru.length;
       const wordIndex = Math.floor(Math.random() * wordCount);
       const spyCount = Math.min(state.settings.spies, Math.max(1, state.players.length - 2));
-      const order = shuffle(state.players.map(p => p.id));
-      const spyIds = order.slice(0, spyCount);
+
+      // Честная рандомизация: избегаем повторного выбора того же шпиона, если игроков достаточно.
+      const allIds = state.players.map(p => p.id);
+      const lastSpyIds = state.lastSpyIds || [];
+      let pool = allIds.filter(id => !lastSpyIds.includes(id));
+      // Если после исключения пул слишком мал для нужного числа шпионов — снимаем ограничение.
+      if (pool.length < spyCount) pool = allIds.slice();
+      const shuffledPool = shuffle(pool);
+      let spyIds = shuffledPool.slice(0, spyCount);
+      // На случай нехватки (защита от краевых случаев) — дозаполняем из оставшихся игроков.
+      if (spyIds.length < spyCount) {
+        const remaining = shuffle(allIds.filter(id => !spyIds.includes(id)));
+        spyIds = spyIds.concat(remaining.slice(0, spyCount - spyIds.length));
+      }
+
       const otherIndices = Array.from({ length: wordCount }, (_, i) => i).filter(i => i !== wordIndex);
       const hintIndices = shuffle(otherIndices).slice(0, 3);
       const revealOrder = shuffle(state.players.map(p => p.id));
+
+      // Кто начнёт говорить первым — случайный игрок, который точно не шпион.
+      const nonSpyIds = allIds.filter(id => !spyIds.includes(id));
+      const speakerPool = nonSpyIds.length > 0 ? nonSpyIds : allIds;
+      const speakerId = speakerPool[Math.floor(Math.random() * speakerPool.length)];
+
       return {
         ...state,
+        lastSpyIds: spyIds,
         round: {
           themeId: theme.id, wordIndex, spyIds, hintIndices,
           revealOrder, revealIndex: 0,
+          speakerId,
+          speakerAnnounced: false,
           aliveIds: state.players.map(p => p.id),
           exiledIds: [],
           phase: "reveal",
@@ -298,6 +339,8 @@ function reducer(state, action) {
     }
     case "CLEAR_EXILE_BANNER":
       return { ...state, round: { ...state.round, lastExiledId: null } };
+    case "ACK_SPEAKER":
+      return { ...state, round: { ...state.round, speakerAnnounced: true } };
     case "SPY_GUESS": {
       const r = state.round;
       const correct = action.wordIndex === r.wordIndex;
@@ -338,6 +381,37 @@ function GameProvider({ children }) {
   const t = STRINGS[state.settings.language] || STRINGS.ru;
   const value = useMemo(() => ({ state, dispatch, t }), [state, t]);
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+}
+
+/* Отслеживает реальные размеры окна/экрана и ориентацию, чтобы верстка подстраивалась под устройство. */
+function useViewport() {
+  const getSize = () => ({
+    width: typeof window !== "undefined" ? window.innerWidth : 0,
+    height: typeof window !== "undefined" ? window.innerHeight : 0,
+  });
+  const [size, setSize] = useState(getSize);
+  useEffect(() => {
+    let raf = null;
+    const onResize = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setSize(getSize()));
+    };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", onResize);
+    }
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+      if (window.visualViewport) window.visualViewport.removeEventListener("resize", onResize);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+  const isLandscape = size.width > size.height;
+  const isNarrow = size.width < 380;
+  const isShort = size.height < 640;
+  return { ...size, isLandscape, isNarrow, isShort };
 }
 
 /* ============================== UI ATOMS ============================== */
@@ -852,7 +926,7 @@ function Reveal() {
           )}
         </div>
       </div>
-      <Button primary disabled={!opened} onClick={() => { if (done) dispatch({ type: "SET_SCREEN", screen: "timer" }); else dispatch({ type: "NEXT_REVEAL" }); }}>
+      <Button primary disabled={!opened} onClick={() => { if (done) dispatch({ type: "SET_SCREEN", screen: "speaker" }); else dispatch({ type: "NEXT_REVEAL" }); }}>
         {done ? t.startGame : t.doneNext}
       </Button>
       <ConfirmModal
@@ -862,6 +936,28 @@ function Reveal() {
         onConfirm={() => { setConfirmLeave(false); dispatch({ type: "NEW_GAME" }); }}
       />
     </Screen>
+  );
+}
+
+function SpeakerAnnounce() {
+  const { state, dispatch, t } = useGame();
+  const { round, players } = state;
+  const speaker = players.find((p) => p.id === round.speakerId) || players[0];
+  const start = () => {
+    dispatch({ type: "ACK_SPEAKER" });
+    dispatch({ type: "SET_SCREEN", screen: "timer" });
+  };
+  return (
+    <div className="sw-speaker-overlay">
+      <div className="sw-speaker-blur" />
+      <div className="sw-speaker-card">
+        <div className="sw-speaker-eyebrow">{t.speakerTitle}</div>
+        <div className="sw-speaker-avatar" style={{ background: colorFor(speaker.name) }}>{speaker.emoji}</div>
+        <h2 className="sw-speaker-name">{speaker.name}</h2>
+        <p className="sw-muted">{t.speakerHint}</p>
+        <Button primary onClick={start} className="sw-speaker-btn">{t.speakerGo}</Button>
+      </div>
+    </div>
   );
 }
 
@@ -957,8 +1053,16 @@ function TimerScreen() {
         onConfirm={() => { setConfirmLeave(false); dispatch({ type: "NEW_GAME" }); }}
       />
 
-      <Modal open={guessOpen} onClose={() => setGuessOpen(false)} title={t.guessTitle} wide>
-        <GuessWordBody theme={theme} lang={lang} correctIndex={round.wordIndex} onGuess={(wordIndex) => { setGuessOpen(false); dispatch({ type: "SPY_GUESS", wordIndex }); }} />
+      <Modal open={guessOpen} onClose={() => setGuessOpen(false)} title={t.whoIsSpy} wide>
+        <SpyRevealFlow
+          players={state.players}
+          spyIds={round.spyIds}
+          theme={theme}
+          lang={lang}
+          correctIndex={round.wordIndex}
+          onGuess={(wordIndex) => { setGuessOpen(false); dispatch({ type: "SPY_GUESS", wordIndex }); }}
+          onClose={() => setGuessOpen(false)}
+        />
       </Modal>
 
       {exileBanner && (
@@ -1023,6 +1127,77 @@ function GuessWordBody({ theme, lang, correctIndex, onGuess }) {
   );
 }
 
+/* Новый флоу для кнопки "Я — шпион": сначала выбор игрока, затем либо панель слов (если это реально шпион), либо баннер "не шпион". */
+function SpyRevealFlow({ players, spyIds, theme, lang, correctIndex, onGuess, onClose }) {
+  const { t } = useGame();
+  const [selectedId, setSelectedId] = useState(null);
+  const [confirming, setConfirming] = useState(false);
+  const [notSpyId, setNotSpyId] = useState(null);
+  const [revealedSpy, setRevealedSpy] = useState(false);
+
+  const selectedPlayer = players.find((p) => p.id === selectedId);
+
+  const pick = (id) => {
+    setSelectedId(id);
+    setConfirming(true);
+  };
+
+  const confirmPick = () => {
+    setConfirming(false);
+    const isSpy = spyIds.includes(selectedId);
+    if (isSpy) {
+      setRevealedSpy(true);
+    } else {
+      setNotSpyId(selectedId);
+    }
+  };
+
+  // Экран 3: выбранный игрок оказался шпионом — показываем панель выбора слова.
+  if (revealedSpy) {
+    return (
+      <div>
+        <p className="sw-muted" style={{ fontWeight: 600, color: "var(--accent-gold)" }}>{t.youAreTheSpyReveal}</p>
+        <GuessWordBody theme={theme} lang={lang} correctIndex={correctIndex} onGuess={onGuess} />
+      </div>
+    );
+  }
+
+  // Экран 2b: выбранный игрок не шпион.
+  if (notSpyId) {
+    const p = players.find((pp) => pp.id === notSpyId);
+    return (
+      <div>
+        <div className="sw-spy-not-found">
+          {p.emoji} <b>{p.name}</b> {t.notTheSpy}
+          <small>{t.notTheSpyContinue}</small>
+        </div>
+        <Button primary onClick={onClose} style={{ width: "100%", marginTop: 12 }}>{t.close}</Button>
+      </div>
+    );
+  }
+
+  // Экран 1: выбор подозреваемого игрока.
+  return (
+    <div>
+      <p className="sw-muted">{t.whoIsSpySubtitle}</p>
+      <div className="sw-spy-pick-grid">
+        {players.map((p) => (
+          <button key={p.id} className="sw-spy-pick-card" onClick={() => pick(p.id)}>
+            <span style={{ background: colorFor(p.name) }}>{p.emoji}</span>
+            <b>{p.name}</b>
+          </button>
+        ))}
+      </div>
+      <ConfirmModal
+        open={confirming} onClose={() => setConfirming(false)}
+        title={t.whoIsSpy}
+        message={`${t.confirmSpyPick} «${selectedPlayer ? selectedPlayer.name : ""}» ${t.areYouSpy}`}
+        onConfirm={confirmPick}
+      />
+    </div>
+  );
+}
+
 function Results() {
   const { state, dispatch, t } = useGame();
   const { round, players } = state;
@@ -1081,7 +1256,8 @@ function StyleSheet() {
     <style>{`
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap');
 
-*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { max-width:100%; overflow-x:hidden; }
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; max-width:100%; }
 .sw-app {
   --bg1:#0f0c29; --bg2:#302b63; --bg3:#24243e;
   --ink:#f4f2ff; --ink-dim:#b9b3d9;
@@ -1089,7 +1265,7 @@ function StyleSheet() {
   --accent-teal:#2dd4bf; --accent-violet:#a78bfa; --accent-pink:#f472b6;
   --accent-gold:#fbbf24; --accent-green:#34d399; --accent-red:#f87171;
   --radius:20px;
-  position:relative; min-height:100dvh; width:100%; overflow-x:hidden;
+  position:relative; min-height:100dvh; width:100vw; max-width:100vw; overflow-x:hidden;
   font-family:'Inter',system-ui,sans-serif; color:var(--ink);
   padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);
   background:linear-gradient(160deg,var(--bg1),var(--bg2) 55%,var(--bg3));
@@ -1111,11 +1287,15 @@ function StyleSheet() {
 @media (max-height:500px) { .sw-skyline { height:30vh; min-height:100px; } }
 
 .sw-screen {
-  position:relative; z-index:1; max-width:520px; margin:0 auto; padding:20px 20px 48px;
-  min-height:100dvh; display:flex; flex-direction:column; gap:14px;
+  position:relative; z-index:1; width:100%; max-width:520px; margin:0 auto;
+  padding:clamp(12px,4vw,20px) clamp(12px,4vw,20px) clamp(28px,8vw,48px);
+  min-height:100dvh; display:flex; flex-direction:column; gap:clamp(10px,3vw,14px);
+  overflow-x:hidden;
 }
-.sw-screen.sw-center { align-items:center; text-align:center; justify-content:flex-start; padding-top:40px; }
+.sw-screen.sw-center { align-items:center; text-align:center; justify-content:flex-start; padding-top:clamp(20px,6vw,40px); }
 .sw-themes-screen { padding-bottom:80px; }
+[data-orientation="landscape"] .sw-screen.sw-center { padding-top:clamp(12px,4vw,20px); }
+[data-short="true"] .sw-screen.sw-center { padding-top:16px; gap:8px; }
 
 h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-muted { color:var(--ink-dim); font-size:0.92rem; line-height:1.5; margin:0; }
@@ -1162,7 +1342,7 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-toggle em { font-style:normal; font-size:0.85rem; margin-left:4px; white-space:nowrap; }
 
 .sw-backdrop { position:fixed; inset:0; background:rgba(10,8,24,0.7); display:flex; align-items:flex-end; justify-content:center; z-index:100; }
-.sw-modal { width:100%; max-width:100%; background:var(--bg3); border:1px solid var(--glass-border); border-radius:24px 24px 0 0; padding:18px 18px 26px; max-height:82vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.sw-modal { width:100%; max-width:100%; background:var(--bg3); border:1px solid var(--glass-border); border-radius:24px 24px 0 0; padding:clamp(14px,4vw,18px) clamp(14px,4vw,18px) clamp(20px,6vw,26px); max-height:82vh; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
 .sw-modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .sw-modal-actions { display:flex; gap:10px; margin-top:16px; }
 .sw-modal-actions .sw-btn { flex:1; }
@@ -1174,12 +1354,12 @@ h1,h2,h3 { font-family:'Manrope',sans-serif; font-weight:800; margin:0; }
 .sw-preview-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
 .sw-preview-word { background:var(--glass); border-left:3px solid var(--accent); border-radius:10px; padding:9px 12px; font-size:0.92rem; }
 
-.sw-add-row { display:flex; gap:10px; align-items:center; }
-.sw-avatar-btn { width:52px; height:52px; border-radius:16px; background:var(--glass); border:1px solid var(--glass-border); font-size:1.5rem; cursor:pointer; flex-shrink:0; }
-.sw-name-input { flex:1; position:relative; background:var(--glass); border:1px solid var(--glass-border); border-radius:14px; padding:0 12px; display:flex; align-items:center; }
-.sw-name-input input { flex:1; min-width:0; background:transparent; border:none; outline:none; color:var(--ink); padding:14px 0; font-size:1rem; }
-.sw-name-input small { color:var(--ink-dim); font-size:0.75rem; }
-.sw-round-btn { width:48px; height:48px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--accent-violet),var(--accent-pink)); color:#fff; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.sw-add-row { display:flex; gap:8px; align-items:center; width:100%; max-width:100%; }
+.sw-avatar-btn { width:clamp(44px,12vw,52px); height:clamp(44px,12vw,52px); border-radius:16px; background:var(--glass); border:1px solid var(--glass-border); font-size:1.4rem; cursor:pointer; flex-shrink:0; }
+.sw-name-input { flex:1 1 auto; min-width:0; position:relative; background:var(--glass); border:1px solid var(--glass-border); border-radius:14px; padding:0 10px; display:flex; align-items:center; }
+.sw-name-input input { flex:1; min-width:0; width:100%; background:transparent; border:none; outline:none; color:var(--ink); padding:14px 0; font-size:1rem; }
+.sw-name-input small { color:var(--ink-dim); font-size:0.75rem; flex-shrink:0; }
+.sw-round-btn { width:clamp(40px,11vw,48px); height:clamp(40px,11vw,48px); border-radius:14px; border:none; background:linear-gradient(135deg,var(--accent-violet),var(--accent-pink)); color:#fff; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
 .sw-round-btn:disabled { opacity:0.4; }
 
 .sw-warning { background:rgba(248,113,113,0.14); border:1px solid rgba(248,113,113,0.4); color:#fca5a5; padding:10px 14px; border-radius:12px; font-size:0.88rem; }
@@ -1280,11 +1460,30 @@ input[type="range"] { width:100%; accent-color:var(--accent-violet); }
 .sw-progress-ring.urgent { stroke:var(--accent-red); }
 .sw-timer-digits { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:clamp(1.8rem,8vw,2.6rem); font-weight:800; font-family:'Manrope',sans-serif; font-variant-numeric:tabular-nums; }
 .sw-timer-digits.urgent { color:var(--accent-red); }
-.sw-timer-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.sw-timer-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; width:100%; }
+.sw-timer-actions .sw-btn { flex:1 1 auto; min-width:0; white-space:nowrap; }
+@media (max-width:420px) {
+  .sw-timer-actions { flex-direction:column; }
+  .sw-timer-actions .sw-btn { width:100%; }
+}
 .sw-exiled-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
 .sw-exiled-chip { background:rgba(255,255,255,0.08); color:var(--ink-dim); padding:6px 10px; border-radius:999px; font-size:0.78rem; text-decoration:line-through; }
 
 .sw-exile-banner { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(20,15,40,0.97); border:1px solid var(--accent-red); color:#fff; padding:16px 22px; border-radius:16px; font-weight:700; z-index:200; text-align:center; max-width:80vw; }
+
+.sw-speaker-overlay { position:fixed; inset:0; z-index:150; display:flex; align-items:center; justify-content:center; padding:24px; }
+.sw-speaker-blur { position:absolute; inset:0; background:rgba(10,8,24,0.55); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+.sw-speaker-card { position:relative; z-index:1; width:100%; max-width:380px; background:var(--bg3); border:1px solid var(--glass-border); border-radius:24px; padding:32px 24px; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
+.sw-speaker-eyebrow { color:var(--accent-teal); font-weight:700; letter-spacing:0.04em; text-transform:uppercase; font-size:0.8rem; }
+.sw-speaker-avatar { width:76px; height:76px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.2rem; margin-top:6px; }
+.sw-speaker-name { font-size:clamp(1.4rem,6vw,1.8rem); margin:0; }
+.sw-speaker-btn { width:100%; margin-top:12px; }
+
+.sw-spy-pick-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.sw-spy-pick-card { position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--glass); border:1px solid var(--glass-border); border-radius:14px; padding:12px 8px; cursor:pointer; color:var(--ink); }
+.sw-spy-pick-card span { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+.sw-spy-not-found { background:rgba(52,211,153,0.14); border:1px solid rgba(52,211,153,0.4); color:#6ee7b7; padding:14px; border-radius:14px; text-align:center; font-weight:600; margin-top:10px; }
+.sw-spy-not-found small { display:block; margin-top:4px; color:var(--ink-dim); font-weight:400; }
 
 .sw-vote-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
 .sw-vote-card { position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--glass); border:1px solid var(--glass-border); border-radius:14px; padding:12px 8px; cursor:pointer; color:var(--ink); }
@@ -1455,6 +1654,7 @@ const CitySkyline = React.memo(function CitySkyline() {
 /* ============================== ROOT APP ============================== */
 function Shell() {
   const { state } = useGame();
+  const viewport = useViewport();
   const screens = {
     splash: <Splash key="splash" />,
     home: <Home key="home" />,
@@ -1463,11 +1663,18 @@ function Shell() {
     settings: <SettingsScreen key="settings" />,
     pregame: <PreGame key="pregame" />,
     reveal: state.round && <Reveal key="reveal" />,
+    speaker: state.round && <SpeakerAnnounce key="speaker" />,
     timer: state.round && <TimerScreen key="timer" />,
     results: state.round && <Results key="results" />,
   };
   return (
-    <div className="sw-app" data-spy-theme={state.settings.dark ? "dark" : "light"}>
+    <div
+      className="sw-app"
+      data-spy-theme={state.settings.dark ? "dark" : "light"}
+      data-orientation={viewport.isLandscape ? "landscape" : "portrait"}
+      data-narrow={viewport.isNarrow ? "true" : "false"}
+      data-short={viewport.isShort ? "true" : "false"}
+    >
       <StyleSheet />
       <div className="sw-ambient"><CitySkyline /></div>
       {screens[state.screen] || <Home key="home" />}
