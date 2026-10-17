@@ -1,9 +1,8 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/.well-known/assetlinks.json",
-      "destination": "/.well-known/assetlinks.json"
+      "destination": "https://gist.githubusercontent.com/Murtazoev1/raw/assetlinks.json"
     },
     {
       "source": "/(.*)",
