@@ -1,7 +1,13 @@
 {
-  "routes": [
-    { "src": "/.well-known/assetlinks.json", "dest": "/public/.well-known/assetlinks.json" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/.well-known/assetlinks.json",
+      "destination": "/.well-known/assetlinks.json"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
