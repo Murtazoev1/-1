@@ -1,19 +1,15 @@
 {
-  "headers": [
+  "routes": [
     {
-      "source": "/.well-known/assetlinks.json",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        }
-      ]
-    }
-  ],
-  "rewrites": [
+      "src": "/.well-known/assetlinks.json",
+      "dest": "/.well-known/assetlinks.json"
+    },
     {
-      "source": "/((?!.well-known/assetlinks.json).*)",
-      "destination": "/index.html"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
