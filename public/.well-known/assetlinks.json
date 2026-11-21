@@ -1,1 +1,8 @@
-BC:0C:1F:E4:FD:D2:DC:95:6E:52:68:42:AA:2A:85:99:43:D9:4F:A0:7A:7F:AD:CF:08:76:15:0C:11:2C:75:5D
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.shpion.party",
+    "sha256_cert_fingerprints": ["BC:0C:1F:E4:FD:D2:DC:95:6E:52:68:42:AA:2A:85:99:43:D9:4F:A0:7A:7F:AD:CF:08:76:15:0C:11:2C:75:5D"]
+  }
+}]
