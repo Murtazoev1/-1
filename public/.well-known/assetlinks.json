@@ -1,8 +1,15 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.shpion.party",
-    "sha256_cert_fingerprints": ["BC:0C:1F:E4:FD:D2:DC:95:6E:52:68:42:AA:2A:85:99:43:D9:4F:A0:7A:7F:AD:CF:08:76:15:0C:11:2C:75:5D"]
+
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.shpion.party",
+      "sha256_cert_fingerprints": [
+        "39:AE:54:A0:EB:20:0D:57:56:DB:E6:39:44:2B:E7:19:52:5A:B7:00:2E:C9:49:09:35:A1:E1:55:96:0A:58:4A"
+      ]
+    }
   }
-}]
+]
